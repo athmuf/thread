@@ -1,19 +1,19 @@
 'use client';
 
-import {fetchThreads} from '../src/utils/api';
-
 import Thread from '../src/components/Thread';
-import {useEffect} from 'react';
+import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '@/src/hooks/redux-hooks';
+import { fetchThreads } from '@/src/features/threads/threads-slice';
 
 export default function Home() {
-  useEffect(() => {
-    const getThreads = async () => {
-      const res = await fetchThreads();
-      console.log(res, 'ini res');
-    };
+  const dispatch = useAppDispatch();
+  const { data, isLoading, error } = useAppSelector(state => state.threads);
 
-    void getThreads();
-  }, []);
+  useEffect(() => {
+    void dispatch(fetchThreads());
+  }, [dispatch]);
+
+  console.log(data, 'data')
   return (
     <div>
       <Thread />

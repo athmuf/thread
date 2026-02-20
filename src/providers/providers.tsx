@@ -1,7 +1,9 @@
-// import {Provider} from 'react-redux';
+'use client';
 
-// export default function Providers() {
-//   return (
+import { Provider } from 'react-redux';
+import store from '@/app/store';
+import { PropsWithChildren } from 'react';
 
-//   <div>providers</div>);
-// }
+export default function Providers({ children }: PropsWithChildren) {
+  return <Provider store={store}>{children}</Provider>;
+}

@@ -9,7 +9,7 @@ try {
 
 if (hasIgnoresFile) {
   const ignores = require('./eslint.ignores.js');
-  customConfig = [{ignores}];
+  customConfig = [{ ignores }];
 }
 
 module.exports = [...customConfig, ...require('gts')];
