@@ -19,7 +19,6 @@ type ThreadCardProps = {
 };
 
 const Thread = ({ thread }: ThreadCardProps) => {
-  console.log(thread, 'thread');
   const cleanBodyContent = _default.sanitize(thread.body);
 
   return (
