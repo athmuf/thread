@@ -1,7 +1,7 @@
 'use client';
 
-import { Provider } from 'react-redux';
 import store from '@/app/store';
+import { Provider } from 'react-redux';
 import { PropsWithChildren } from 'react';
 
 export default function Providers({ children }: PropsWithChildren) {
