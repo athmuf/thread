@@ -1,13 +1,20 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { RootUsers, UsersState } from './types';
-import * as api from '@/src/utils/api';
+import {
+  createSlice,
+  createAsyncThunk,
+  createEntityAdapter,
+} from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
+import * as api from '@/src/utils/api';
+import { RootUsers, User } from './types';
 
-const initialState: UsersState = {
-  data: [],
-  error: null,
+export const usersAdapter = createEntityAdapter({
+  selectId: (user: User) => user.id,
+});
+
+const initialState = usersAdapter.getInitialState({
+  error: null as string | null,
   isLoading: true,
-};
+});
 
 const fetchUsers = createAsyncThunk<RootUsers, void, { rejectValue: string }>(
   'users/fetchUsers',
@@ -35,7 +42,7 @@ const usersSlice = createSlice({
       })
       .addCase(fetchUsers.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.data = action.payload.data.users;
+        usersAdapter.setAll(state, action.payload.data.users);
       })
       .addCase(fetchUsers.rejected, (state, action) => {
         state.isLoading = false;

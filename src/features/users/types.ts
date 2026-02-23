@@ -2,6 +2,7 @@
 
 export interface UsersState {
   data: User[];
+  byId: Record<string, User>;
   error: string | null;
   isLoading: boolean;
 }
