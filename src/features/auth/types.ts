@@ -3,6 +3,12 @@
 export interface AuthState {
   profile: User | null;
   isAuthenticated: boolean;
+  register: Register;
+}
+
+export interface Register {
+  isLoading: boolean;
+  data: RootUserProfile | null;
 }
 
 // User data API

@@ -6,6 +6,10 @@ import { AxiosError } from 'axios';
 const initialState: AuthState = {
   profile: null,
   isAuthenticated: false,
+  register: {
+    data: null,
+    isLoading: false,
+  },
 };
 
 const register = createAsyncThunk<
@@ -26,20 +30,19 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {},
-  // extraReducers: builder => {
-  //   builder
-  //     .addCase(fetchThreads.pending, state => {
-  //       state.isLoading = true;
-  //     })
-  //     .addCase(fetchThreads.fulfilled, (state, action) => {
-  //       state.isLoading = false;
-  //       state.data = action.payload.data.threads;
-  //     })
-  //     .addCase(fetchThreads.rejected, (state, action) => {
-  //       state.isLoading = false;
-  //       state.error = action.payload as string;
-  //     });
-  // },
+  extraReducers: builder => {
+    builder
+      .addCase(register.pending, state => {
+        state.register.isLoading = true;
+      })
+      .addCase(register.fulfilled, (state, action) => {
+        state.register.isLoading = false;
+        state.register.data = action.payload;
+      })
+      .addCase(register.rejected, state => {
+        state.register.isLoading = false;
+      });
+  },
 });
 
 export { register };
