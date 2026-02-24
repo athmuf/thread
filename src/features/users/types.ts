@@ -1,4 +1,4 @@
-// Threads state types
+// Users state types
 
 export interface UsersState {
   data: User[];
@@ -7,7 +7,7 @@ export interface UsersState {
   isLoading: boolean;
 }
 
-// Fetch data API types
+// Fetch threads data API types
 
 export interface RootUsers {
   status: string;

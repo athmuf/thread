@@ -2,6 +2,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import Providers from '@/src/providers/providers';
 import { Geist, Geist_Mono } from 'next/font/google';
+import AuthDialog from '@/components/ui/cuitin/auth-dialog';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -30,6 +31,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <Providers>
+          <AuthDialog />
           <div className="flex min-h-screen items-center justify-center bg-zinc-100 font-sans dark:bg-black">
             <main className="flex min-h-screen w-full max-w-5xl flex-col items-center justify-between md:py-32 py-10 md:px-16 px-3 bg-white dark:bg-black sm:items-start">
               {children}
