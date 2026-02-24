@@ -7,6 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '../dialog';
+import { toast } from 'sonner';
 import { Input } from '../input';
 import { Button } from '../button';
 import { useForm, Controller } from 'react-hook-form';
@@ -42,7 +43,9 @@ const RegisterForm = () => {
 
   const onSubmit = async (data: z.infer<typeof registerSchema>) => {
     try {
-      await dispatch(register(data)).unwrap();
+      await dispatch(register(data))
+        .unwrap()
+        .then(res => toast.success(res.message));
     } catch (error) {
       const message = error as string;
       const fields = ['name', 'email', 'password'] as const;
