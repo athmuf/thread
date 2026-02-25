@@ -15,53 +15,51 @@ import { Field, FieldError, FieldGroup, FieldLabel } from '../field';
 
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { register } from '@/src/features/auth/auth-slice';
+import { login } from '@/src/features/auth/auth-slice';
 import { useAppDispatch, useAppSelector } from '@/src/hooks/redux-hooks';
-import { openDialog } from '@/src/features/auth-dialog/auth-dialog-slice';
+import {
+  openDialog,
+  closeDialog,
+} from '@/src/features/auth-dialog/auth-dialog-slice';
 
-const RegisterForm = () => {
+const LoginForm = () => {
   const dispatch = useAppDispatch();
 
-  const { isLoading } = useAppSelector(state => state.auth.register);
+  const { isLoading } = useAppSelector(state => state.auth.login);
+  const tempEmail =
+    useAppSelector(state => state.auth.register.data?.data.user.email) || '';
 
-  const registerSchema = z.object({
-    name: z.string().min(1, 'Name is not allowed to be empty'),
-    email: z
-      .string()
-      .min(1, 'Email is not allowed to be empty')
-      .email('Email must be a valid email'),
-    password: z.string().min(1, 'Password is not allowed to be empty'),
+  const loginSchema = z.object({
+    email: z.string().email('Email must be a valid email'),
+    password: z.string(),
   });
 
-  const registerForm = useForm<z.infer<typeof registerSchema>>({
-    resolver: zodResolver(registerSchema),
+  const loginForm = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
-      name: '',
-      email: '',
+      email: tempEmail,
       password: '',
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof registerSchema>) => {
+  const onSubmit = async (data: z.infer<typeof loginSchema>) => {
     try {
-      await dispatch(register(data))
+      await dispatch(login(data))
         .unwrap()
-        .then(res => toast.success(res.message || 'Create account success'));
-      dispatch(dispatch(openDialog('login')));
+        .then(res => toast.success(res.message || 'Login success'));
+      dispatch(openDialog('login'));
     } catch (error) {
       const message = error as string;
-      const fields = ['name', 'email', 'password'] as const;
+      const match = message.match(/"(.*?)"/);
+      const field = match?.[1] as keyof z.infer<typeof loginSchema> | undefined;
 
-      const matchedField = fields.find(field =>
-        message.toLowerCase().includes(field),
-      );
-      if (matchedField) {
-        registerForm.setError(matchedField, {
+      if (field) {
+        loginForm.setError(field, {
           type: 'server',
           message,
         });
       } else {
-        registerForm.setError('root', {
+        loginForm.setError('root', {
           type: 'server',
           message,
         });
@@ -71,34 +69,14 @@ const RegisterForm = () => {
   return (
     <DialogContent className="py-24">
       <DialogHeader className="items-center">
-        <DialogTitle className="text-2xl">Create an account</DialogTitle>
-        <DialogDescription>
-          Create an account to explore cuitin
-        </DialogDescription>
+        <DialogTitle className="text-2xl">Login to Your Account</DialogTitle>
+        <DialogDescription>See what’s new on Cuitin by login</DialogDescription>
       </DialogHeader>
-      <form onSubmit={registerForm.handleSubmit(onSubmit)}>
+      <form onSubmit={loginForm.handleSubmit(onSubmit)}>
         <FieldGroup className="py-6">
           <Controller
-            name="name"
-            control={registerForm.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="name">Name</FieldLabel>
-                <Input
-                  {...field}
-                  id="name"
-                  aria-invalid={fieldState.invalid}
-                  placeholder="John Doe"
-                />
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
-              </Field>
-            )}
-          />
-          <Controller
             name="email"
-            control={registerForm.control}
+            control={loginForm.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
@@ -116,7 +94,7 @@ const RegisterForm = () => {
           />
           <Controller
             name="password"
-            control={registerForm.control}
+            control={loginForm.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="password">Password</FieldLabel>
@@ -132,9 +110,9 @@ const RegisterForm = () => {
               </Field>
             )}
           />
-          {registerForm.formState.errors.root && (
+          {loginForm.formState.errors.root && (
             <p className="text-sm font-medium text-destructive mb-4">
-              {registerForm.formState.errors.root.message}
+              {loginForm.formState.errors.root.message}
             </p>
           )}
           <Button
@@ -142,20 +120,20 @@ const RegisterForm = () => {
             className="w-full mt-4 cursor-pointer"
             disabled={isLoading}
           >
-            Register
+            Login
           </Button>
         </FieldGroup>
       </form>
       <DialogFooter className="flex justify-center sm:justify-center">
         <DialogDescription className="text-center">
-          Already have an account?{' '}
+          Don't have an account yet?{' '}
           <Button
             type="button"
             variant="link"
             className="cursor-pointer px-0"
-            onClick={() => dispatch(openDialog('login'))}
+            onClick={() => dispatch(openDialog('register'))}
           >
-            Login
+            Register
           </Button>
         </DialogDescription>
       </DialogFooter>
@@ -163,4 +141,4 @@ const RegisterForm = () => {
   );
 };
 
-export default RegisterForm;
+export default LoginForm;

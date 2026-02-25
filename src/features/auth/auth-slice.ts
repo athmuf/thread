@@ -1,5 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { AuthState, RootUserProfile, RegisterProps } from './types';
+import {
+  AuthState,
+  RootUserProfile,
+  RegisterProps,
+  RootLogin,
+  LoginProps,
+} from './types';
 import * as api from '@/src/utils/api';
 import { AxiosError } from 'axios';
 
@@ -8,6 +14,9 @@ const initialState: AuthState = {
   isAuthenticated: false,
   register: {
     data: null,
+    isLoading: false,
+  },
+  login: {
     isLoading: false,
   },
 };
@@ -26,12 +35,26 @@ const register = createAsyncThunk<
   }
 });
 
+const login = createAsyncThunk<RootLogin, LoginProps, { rejectValue: string }>(
+  'auth/login',
+  async (data, { rejectWithValue }) => {
+    try {
+      const res = await api.login(data);
+      return res;
+    } catch (error: unknown) {
+      const err = error as AxiosError<{ message: string }>;
+      return rejectWithValue(err.response?.data?.message || 'Failed login');
+    }
+  },
+);
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {},
   extraReducers: builder => {
     builder
+      // Register case
       .addCase(register.pending, state => {
         state.register.isLoading = true;
       })
@@ -41,9 +64,20 @@ const authSlice = createSlice({
       })
       .addCase(register.rejected, state => {
         state.register.isLoading = false;
+      })
+
+      // Login case
+      .addCase(login.pending, state => {
+        state.login.isLoading = true;
+      })
+      .addCase(login.fulfilled, state => {
+        state.login.isLoading = false;
+      })
+      .addCase(login.rejected, state => {
+        state.login.isLoading = false;
       });
   },
 });
 
-export { register };
+export { register, login };
 export default authSlice.reducer;
