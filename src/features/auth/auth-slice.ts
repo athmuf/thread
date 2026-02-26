@@ -19,6 +19,9 @@ const initialState: AuthState = {
   login: {
     isLoading: false,
   },
+  me: {
+    isLoading: false,
+  },
 };
 
 const register = createAsyncThunk<
@@ -40,6 +43,8 @@ const login = createAsyncThunk<RootLogin, LoginProps, { rejectValue: string }>(
   async (data, { rejectWithValue }) => {
     try {
       const res = await api.login(data);
+      localStorage.setItem('cuitin-token', res.data.token);
+      fetchProfile();
       return res;
     } catch (error: unknown) {
       const err = error as AxiosError<{ message: string }>;
@@ -47,6 +52,20 @@ const login = createAsyncThunk<RootLogin, LoginProps, { rejectValue: string }>(
     }
   },
 );
+
+const fetchProfile = createAsyncThunk<
+  RootUserProfile,
+  void,
+  { rejectValue: string }
+>('auth/getProfile', async (_, { rejectWithValue }) => {
+  try {
+    const res = await api.getProfile();
+    return res;
+  } catch (error: unknown) {
+    const err = error as AxiosError<{ message: string }>;
+    return rejectWithValue(err.response?.data?.message || 'Failed get profile');
+  }
+});
 
 const authSlice = createSlice({
   name: 'auth',
@@ -72,12 +91,28 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, state => {
         state.login.isLoading = false;
+        state.isAuthenticated = true;
       })
       .addCase(login.rejected, state => {
         state.login.isLoading = false;
+        state.isAuthenticated = false;
+      })
+
+      // Get profile case
+      .addCase(fetchProfile.pending, state => {
+        state.me.isLoading = true;
+      })
+      .addCase(fetchProfile.fulfilled, (state, actions) => {
+        state.me.isLoading = false;
+        state.profile = actions.payload.data.user;
+        state.isAuthenticated = true;
+      })
+      .addCase(fetchProfile.rejected, state => {
+        state.me.isLoading = false;
+        state.isAuthenticated = false;
       });
   },
 });
 
-export { register, login };
+export { register, login, fetchProfile };
 export default authSlice.reducer;

@@ -9,13 +9,13 @@ import {
 import { Badge } from '../badge';
 import IconAction from './icon-action';
 import ColoredAvatar from './colored-avatar';
-import { Avatar, AvatarFallback, AvatarGroup } from '../avatar';
+import { AvatarGroup } from '../avatar';
 import { Thread as ThreadType } from '@/src/features/threads/types';
 import { formatRelativeTime } from '@/src/helper/format-relative-time';
 import _default from 'dompurify';
 import { Reply, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { useAppSelector } from '@/src/hooks/redux-hooks';
-import { selectUserById, createInitial } from '@/src/helper/format-name';
+import { selectUserById } from '@/src/helper/format-name';
 
 type ThreadCardProps = {
   thread: ThreadType;
@@ -23,15 +23,14 @@ type ThreadCardProps = {
 
 const Thread = ({ thread }: ThreadCardProps) => {
   const cleanBodyContent = _default.sanitize(thread.body);
-  const ownerName = useAppSelector(selectUserById(thread.ownerId));
+  const owner = useAppSelector(selectUserById(thread.ownerId));
   const likeBy = useAppSelector(selectUserById(thread?.upVotesBy[0]));
-  const ownerInitial = createInitial(ownerName) || 'U';
 
   return (
     <Card className="shadow-none border-b-2 border-x-0 border-t-0 rounded-none py-3 gap-2">
       <CardHeader className="flex items-center px-2 md:px-6">
-        <ColoredAvatar size="lg" initialName={ownerInitial} />
-        <div className="text-neutral-600 pl-2">{ownerName}</div>
+        <ColoredAvatar size="lg" data={owner} />
+        <div className="text-neutral-600 pl-2">{owner.name}</div>
       </CardHeader>
       <CardContent className="md:pl-20 pl-16">
         <CardTitle className="pb-2">{thread.title}</CardTitle>
@@ -48,14 +47,15 @@ const Thread = ({ thread }: ThreadCardProps) => {
           <div className="flex items-center">
             <AvatarGroup>
               {thread.upVotesBy.slice(0, 3).map(user => (
-                <Avatar key={user} size="sm">
-                  <AvatarFallback>US</AvatarFallback>
-                </Avatar>
+                <ColoredAvatar
+                  size="sm"
+                  data={useAppSelector(selectUserById(user))}
+                />
               ))}
             </AvatarGroup>
             <div className="pl-2 text-sm">
-              disukai oleh <span className="font-medium">{likeBy}</span> dan
-              lainnya
+              disukai oleh <span className="font-medium">{likeBy.name}</span>{' '}
+              dan lainnya
             </div>
           </div>
         )}

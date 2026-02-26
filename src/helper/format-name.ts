@@ -9,7 +9,7 @@ export const usersSelectors = usersAdapter.getSelectors(
 export const selectUserById = (id: string) =>
   createSelector(
     (state: RootState) => usersSelectors.selectById(state, id),
-    user => user?.name ?? 'Unknown User',
+    user => user ?? {},
   );
 
 export const createInitial = (name: string): string => {

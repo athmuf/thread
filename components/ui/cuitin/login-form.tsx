@@ -47,7 +47,7 @@ const LoginForm = () => {
       await dispatch(login(data))
         .unwrap()
         .then(res => toast.success(res.message || 'Login success'));
-      dispatch(openDialog('login'));
+      dispatch(closeDialog());
     } catch (error) {
       const message = error as string;
       const match = message.match(/"(.*?)"/);

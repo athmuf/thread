@@ -5,12 +5,14 @@ import { useEffect } from 'react';
 import { useAppDispatch } from '@/src/hooks/redux-hooks';
 import { fetchThreads } from '@/src/features/threads/threads-slice';
 import { fetchUsers } from '@/src/features/users/users-slice';
+import { fetchProfile } from '@/src/features/auth/auth-slice';
 export default function Home() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     void dispatch(fetchThreads());
     void dispatch(fetchUsers());
+    void dispatch(fetchProfile());
   }, [dispatch]);
 
   return (

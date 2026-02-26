@@ -9,8 +9,6 @@ const Threads = () => {
     error: usersError,
   } = useAppSelector(state => state.users);
 
-  console.log(usersData, 'user data');
-
   return (
     <div>
       {data.map(thread => (

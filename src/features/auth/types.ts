@@ -4,6 +4,7 @@ export interface AuthState {
   isAuthenticated: boolean;
   register: Register;
   login: Login;
+  me: Me;
 }
 
 export interface Register {
@@ -12,6 +13,10 @@ export interface Register {
 }
 
 export interface Login {
+  isLoading: boolean;
+}
+
+export interface Me {
   isLoading: boolean;
 }
 

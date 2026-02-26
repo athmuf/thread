@@ -16,7 +16,7 @@ const AuthDialog = () => {
     }
   };
 
-  return <Dialog open={true}>{getFormType()}</Dialog>;
+  return <Dialog open={open}>{getFormType()}</Dialog>;
 };
 
 export default AuthDialog;

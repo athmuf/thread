@@ -29,3 +29,8 @@ export const login = async (data: LoginProps): Promise<RootLogin> => {
   const res = await api.post<RootLogin>('/login', data);
   return res.data;
 };
+
+export const getProfile = async (): Promise<RootUserProfile> => {
+  const res = await api.get<RootUserProfile>('/users/me');
+  return res.data;
+};
