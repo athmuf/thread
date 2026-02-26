@@ -12,6 +12,12 @@ export const selectUserById = (id: string) =>
     user => user ?? {},
   );
 
+export const selectUsersByIds = (ids: string[]) =>
+  createSelector(
+    (state: RootState) => state.users.entities,
+    usersEntities => ids.map(id => usersEntities[id] ?? {}),
+  );
+
 export const createInitial = (name: string): string => {
   if (!name) return '';
 

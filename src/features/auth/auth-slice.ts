@@ -8,6 +8,7 @@ import {
 } from './types';
 import * as api from '@/src/utils/api';
 import { AxiosError } from 'axios';
+import { toast } from 'sonner';
 
 const initialState: AuthState = {
   profile: null,
@@ -70,7 +71,14 @@ const fetchProfile = createAsyncThunk<
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    logout: state => {
+      state.profile = null;
+      state.isAuthenticated = false;
+      localStorage.removeItem('cuitin-token');
+      toast.success('Logout Berhasil');
+    },
+  },
   extraReducers: builder => {
     builder
       // Register case
@@ -114,5 +122,6 @@ const authSlice = createSlice({
   },
 });
 
+export const { logout } = authSlice.actions;
 export { register, login, fetchProfile };
 export default authSlice.reducer;

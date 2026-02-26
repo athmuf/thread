@@ -1,19 +1,84 @@
-'use client'
-import { useAppSelector } from '@/src/hooks/redux-hooks';
-import { Avatar } from '../avatar';
+'use client';
+
 import ColoredAvatar from './colored-avatar';
+import {
+  CircleUser,
+  EllipsisVertical,
+  LogIn,
+  LogOut,
+  User,
+} from 'lucide-react';
+import { useAppSelector } from '@/src/hooks/redux-hooks';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from '../dropdown-menu';
+import { logout } from '@/src/features/auth/auth-slice';
+import { useAppDispatch } from '@/src/hooks/redux-hooks';
+import { openDialog } from '@/src/features/auth-dialog/auth-dialog-slice';
+import { Button } from '../button';
 
 const Header = () => {
-  // const { profile } = useAppSelector(state => state.auth);
-  const { data, isLoading, error } = useAppSelector(state => state.threads);
+  const { profile, isAuthenticated } = useAppSelector(state => state.auth);
+
+  const dispatch = useAppDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    dispatch(openDialog('login'));
+  };
+
+  const handleLogin = () => {
+    dispatch(openDialog('login'));
+  };
+
   return (
-    <div className="flex justify-center items-center">
-      <div className="md:px-16 px-3 w-full max-w-5xl flex justify-between">
-        <div>C</div>
-        <div></div>
-        <div>
-          <Avatar>AvatarImage</Avatar>
-        </div>
+    <div className="flex justify-center items-center shadow-lg">
+      <div className="md:px-10 px-3 py-2 w-full max-w-5xl flex justify-between">
+        <div className="font-bold text-3xl text-orange-300">Cuitin</div>
+        {isAuthenticated ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <div className="cursor-pointer flex justify-center items-center">
+                {isAuthenticated ? (
+                  profile ? (
+                    <ColoredAvatar size="lg" data={profile} />
+                  ) : (
+                    <CircleUser />
+                  )
+                ) : (
+                  <EllipsisVertical size={16} />
+                )}
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-40" align="start">
+              <DropdownMenuGroup>
+                <DropdownMenuLabel className="flex hover:bg-slate-100 duration-200 cursor-pointer">
+                  <User size={12} />
+                  <span className="ml-2">Profile</span>
+                </DropdownMenuLabel>
+                <DropdownMenuLabel
+                  className="flex hover:bg-slate-100 duration-200 cursor-pointer"
+                  onClick={handleLogout}
+                >
+                  <LogOut size={12} />
+                  <span className="ml-2">Log Out</span>
+                </DropdownMenuLabel>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <Button
+            variant="outline"
+            className="cursor-pointer"
+            onClick={handleLogin}
+          >
+            <LogIn size={12} /> <span>Log In</span>
+          </Button>
+        )}
       </div>
     </div>
   );

@@ -21,11 +21,13 @@ import {
   openDialog,
   closeDialog,
 } from '@/src/features/auth-dialog/auth-dialog-slice';
+import { useEffect } from 'react';
 
 const LoginForm = () => {
   const dispatch = useAppDispatch();
 
   const { isLoading } = useAppSelector(state => state.auth.login);
+  const { open } = useAppSelector(state => state.AuthDialog);
   const tempEmail =
     useAppSelector(state => state.auth.register.data?.data.user.email) || '';
 
@@ -48,6 +50,7 @@ const LoginForm = () => {
         .unwrap()
         .then(res => toast.success(res.message || 'Login success'));
       dispatch(closeDialog());
+      loginForm.reset();
     } catch (error) {
       const message = error as string;
       const match = message.match(/"(.*?)"/);
@@ -66,6 +69,13 @@ const LoginForm = () => {
       }
     }
   };
+
+  useEffect(() => {
+    if (!open) {
+      loginForm.reset();
+    }
+  }, [open]);
+
   return (
     <DialogContent className="py-24">
       <DialogHeader className="items-center">

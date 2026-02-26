@@ -15,7 +15,8 @@ import { formatRelativeTime } from '@/src/helper/format-relative-time';
 import _default from 'dompurify';
 import { Reply, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { useAppSelector } from '@/src/hooks/redux-hooks';
-import { selectUserById } from '@/src/helper/format-name';
+import { selectUserById, selectUsersByIds } from '@/src/helper/format-name';
+import { useMemo } from 'react';
 
 type ThreadCardProps = {
   thread: ThreadType;
@@ -23,8 +24,16 @@ type ThreadCardProps = {
 
 const Thread = ({ thread }: ThreadCardProps) => {
   const cleanBodyContent = _default.sanitize(thread.body);
-  const owner = useAppSelector(selectUserById(thread.ownerId));
-  const likeBy = useAppSelector(selectUserById(thread?.upVotesBy[0]));
+  const owner = useAppSelector(
+    useMemo(() => selectUserById(thread.ownerId), [thread.ownerId]),
+  );
+
+  const likeBy = useAppSelector(
+    useMemo(
+      () => selectUsersByIds(thread?.upVotesBy || []),
+      [thread?.upVotesBy],
+    ),
+  );
 
   return (
     <Card className="shadow-none border-b-2 border-x-0 border-t-0 rounded-none py-3 gap-2">
@@ -46,15 +55,12 @@ const Thread = ({ thread }: ThreadCardProps) => {
         {thread.upVotesBy.length > 0 && (
           <div className="flex items-center">
             <AvatarGroup>
-              {thread.upVotesBy.slice(0, 3).map(user => (
-                <ColoredAvatar
-                  size="sm"
-                  data={useAppSelector(selectUserById(user))}
-                />
+              {likeBy.slice(0, 3).map((user, index) => (
+                <ColoredAvatar key={index} size="sm" data={user} />
               ))}
             </AvatarGroup>
             <div className="pl-2 text-sm">
-              disukai oleh <span className="font-medium">{likeBy.name}</span>{' '}
+              disukai oleh <span className="font-medium">{likeBy[0].name}</span>{' '}
               dan lainnya
             </div>
           </div>

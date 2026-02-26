@@ -2,11 +2,12 @@
 import { Dialog } from '../dialog';
 import LoginForm from './login-form';
 import RegisterForm from './register-form';
-import { useAppSelector } from '@/src/hooks/redux-hooks';
+import { useAppSelector, useAppDispatch } from '@/src/hooks/redux-hooks';
+import { closeDialog } from '@/src/features/auth-dialog/auth-dialog-slice';
 
 const AuthDialog = () => {
+  const dispatch = useAppDispatch();
   const { open, type } = useAppSelector(state => state.AuthDialog);
-  console.log(type, 'ini tope');
 
   const getFormType = () => {
     if (type === 'register') {
@@ -16,7 +17,11 @@ const AuthDialog = () => {
     }
   };
 
-  return <Dialog open={open}>{getFormType()}</Dialog>;
+  return (
+    <Dialog open={open} onOpenChange={() => dispatch(closeDialog())}>
+      {getFormType()}
+    </Dialog>
+  );
 };
 
 export default AuthDialog;
