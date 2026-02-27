@@ -36,8 +36,8 @@ const Header = () => {
   };
 
   return (
-    <div className="flex justify-center items-center shadow-lg">
-      <div className="md:px-10 px-3 py-2 w-full max-w-5xl flex justify-between">
+    <div className="flex justify-center items-center shadow-lg border-b">
+      <div className="md:px-10 px-3 py-4 w-full max-w-5xl flex justify-between">
         <div className="font-bold text-3xl text-orange-300">Cuitin</div>
         {isAuthenticated ? (
           <DropdownMenu>
