@@ -9,10 +9,10 @@ export interface DetailThreadState {
 export interface RootDetailThread {
   status: string;
   message: string;
-  data: Data3;
+  data: Data;
 }
 
-export interface Data3 {
+export interface Data {
   detailThread: DetailThread;
 }
 
