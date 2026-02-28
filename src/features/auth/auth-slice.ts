@@ -45,7 +45,6 @@ const login = createAsyncThunk<RootLogin, LoginProps, { rejectValue: string }>(
     try {
       const res = await api.login(data);
       localStorage.setItem('cuitin-token', res.data.token);
-      fetchProfile();
       return res;
     } catch (error: unknown) {
       const err = error as AxiosError<{ message: string }>;

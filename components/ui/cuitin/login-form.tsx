@@ -15,7 +15,7 @@ import { Field, FieldError, FieldGroup, FieldLabel } from '../field';
 
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { login } from '@/src/features/auth/auth-slice';
+import { fetchProfile, login } from '@/src/features/auth/auth-slice';
 import { useAppDispatch, useAppSelector } from '@/src/hooks/redux-hooks';
 import {
   openDialog,
@@ -49,6 +49,7 @@ const LoginForm = () => {
       await dispatch(login(data))
         .unwrap()
         .then(res => toast.success(res.message || 'Login success'));
+      await dispatch(fetchProfile());
       dispatch(closeDialog());
       loginForm.reset();
     } catch (error) {
