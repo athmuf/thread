@@ -1,11 +1,11 @@
 'use client';
-import { Input } from './input';
-import { Button } from './button';
-import { Textarea } from './textarea';
-import { Separator } from './separator';
+import { Input } from '../input';
+import { Button } from '../button';
+import { Textarea } from '../textarea';
+import { Separator } from '../separator';
 import { CircleUser, Plus } from 'lucide-react';
-import ColoredAvatar from './cuitin/colored-avatar';
-import { Card, CardAction, CardContent } from './card';
+import ColoredAvatar from './colored-avatar';
+import { Card, CardAction, CardContent } from '../card';
 
 import * as z from 'zod';
 import { toast } from 'sonner';
@@ -13,7 +13,10 @@ import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { useAppSelector, useAppDispatch } from '@/src/hooks/redux-hooks';
-import { createThreads } from '@/src/features/threads/threads-slice';
+import {
+  createThreads,
+  fetchThreads,
+} from '@/src/features/threads/threads-slice';
 
 export const CreateThread = () => {
   const dispatch = useAppDispatch();
@@ -48,6 +51,7 @@ export const CreateThread = () => {
         .unwrap()
         .then(res => toast.success(res.message || 'Success create thread'));
       threadForm.reset();
+      void dispatch(fetchThreads());
     } catch (error) {
       const message = error as string;
       toast.error(message || 'Failed create thread. Try again later');
@@ -57,7 +61,7 @@ export const CreateThread = () => {
   const { profile, isAuthenticated } = useAppSelector(state => state.auth);
   if (isAuthenticated)
     return (
-      <Card className="shadow-none border-b-2 border-x-0 border-t-0 rounded-none py-3 gap-2">
+      <Card className="shadow-none border-x-0 border-t-0 rounded-none py-3 gap-2">
         <form onSubmit={threadForm.handleSubmit(onSubmit)}>
           <CardContent className="flex px-2 md:px-6">
             {profile ? (
@@ -91,7 +95,7 @@ export const CreateThread = () => {
               <Separator />
             </div>
           </CardContent>
-          <CardAction className="md:pl-16 pl-12 flex justify-between w-full">
+          <CardAction className="md:pl-16 pl-12 flex justify-between w-full mt-3 mb-5">
             <div className="ml-4 flex items-center gap-2">
               <div className="text-sm">tags:</div>
               {showInputTag ? (
@@ -119,7 +123,9 @@ export const CreateThread = () => {
                 </Button>
               )}
             </div>
-            <Button className="rounded-full px-6 mr-8">Posting</Button>
+            <Button className="rounded-full px-6 mr-8 cursor-pointer hover:shadow-md">
+              Posting
+            </Button>
           </CardAction>
         </form>
       </Card>

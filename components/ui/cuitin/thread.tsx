@@ -17,6 +17,7 @@ import { Reply, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { useAppSelector } from '@/src/hooks/redux-hooks';
 import { selectUserById, selectUsersByIds } from '@/src/helper/format-name';
 import { useMemo } from 'react';
+import { Separator } from '../separator';
 
 type ThreadCardProps = {
   thread: ThreadType;
@@ -36,7 +37,7 @@ const Thread = ({ thread }: ThreadCardProps) => {
   );
 
   return (
-    <Card className="shadow-none border-b-2 border-x-0 border-t-0 rounded-none py-3 gap-2">
+    <Card className="shadow-none border-0 rounded-none py-3 gap-2">
       <CardHeader className="flex items-center px-2 md:px-6">
         <ColoredAvatar size="lg" data={owner} />
         <div className="text-neutral-600 pl-2">{owner.name}</div>
@@ -80,6 +81,7 @@ const Thread = ({ thread }: ThreadCardProps) => {
           <Reply />
         </IconAction>
       </CardAction>
+      <Separator />
     </Card>
   );
 };
