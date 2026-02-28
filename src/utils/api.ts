@@ -1,5 +1,9 @@
 import api from '../config/axios';
-import { RootThreads } from '../features/threads/types';
+import {
+  RootThreads,
+  RootCreateThread,
+  CreateThreadProps,
+} from '../features/threads/types';
 import { RootUsers } from '../features/users/types';
 import {
   RootUserProfile,
@@ -10,6 +14,13 @@ import {
 
 export const fetchThreads = async (): Promise<RootThreads> => {
   const res = await api.get<RootThreads>('/threads');
+  return res.data;
+};
+
+export const createThread = async (
+  data: CreateThreadProps,
+): Promise<RootCreateThread> => {
+  const res = await api.post<RootCreateThread>('/threads', data);
   return res.data;
 };
 

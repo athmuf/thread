@@ -1,5 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { ThreadsState, RootThreads } from './types';
+import {
+  ThreadsState,
+  RootThreads,
+  RootCreateThread,
+  CreateThreadProps,
+} from './types';
 import * as api from '@/src/utils/api';
 import { AxiosError } from 'axios';
 
@@ -25,12 +30,29 @@ const fetchThreads = createAsyncThunk<
   }
 });
 
+const createThreads = createAsyncThunk<
+  RootCreateThread,
+  CreateThreadProps,
+  { rejectValue: string }
+>('threads/createThreads', async (data, { rejectWithValue }) => {
+  try {
+    const res = await api.createThread(data);
+    return res;
+  } catch (error: unknown) {
+    const err = error as AxiosError<{ message: string }>;
+    return rejectWithValue(
+      err.response?.data?.message || 'Failed to create thread',
+    );
+  }
+});
+
 const threadsSlice = createSlice({
   name: 'threads',
   initialState,
   reducers: {},
   extraReducers: builder => {
     builder
+      // Fetch threads data
       .addCase(fetchThreads.pending, state => {
         state.isLoading = true;
       })
@@ -45,5 +67,5 @@ const threadsSlice = createSlice({
   },
 });
 
-export { fetchThreads };
+export { fetchThreads, createThreads };
 export default threadsSlice.reducer;
