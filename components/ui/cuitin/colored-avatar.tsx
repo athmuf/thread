@@ -1,9 +1,14 @@
 import { Avatar, AvatarFallback, AvatarImage } from '../avatar';
 import { createInitial } from '@/src/helper/format-name';
-import { User } from '@/src/features/auth/types';
+
+type UserProps = {
+  id: string;
+  name: string;
+  avatar: string;
+};
 
 type ColoredAvatarProps = React.ComponentProps<typeof Avatar> & {
-  data: User;
+  data: UserProps;
 };
 
 const ColoredAvatar = ({ data, ...props }: ColoredAvatarProps) => {

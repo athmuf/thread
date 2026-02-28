@@ -11,6 +11,7 @@ import {
   RootLogin,
   LoginProps,
 } from '../features/auth/types';
+import { RootDetailThread } from '../features/detail-thread/types';
 
 export const fetchThreads = async (): Promise<RootThreads> => {
   const res = await api.get<RootThreads>('/threads');
@@ -21,6 +22,13 @@ export const createThread = async (
   data: CreateThreadProps,
 ): Promise<RootCreateThread> => {
   const res = await api.post<RootCreateThread>('/threads', data);
+  return res.data;
+};
+
+export const fetchDetailThread = async (
+  id: string,
+): Promise<RootDetailThread> => {
+  const res = await api.get<RootDetailThread>(`/threads/${id}`);
   return res.data;
 };
 

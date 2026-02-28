@@ -27,7 +27,7 @@ const LoginForm = () => {
   const dispatch = useAppDispatch();
 
   const { isLoading } = useAppSelector(state => state.auth.login);
-  const { open } = useAppSelector(state => state.AuthDialog);
+  const { open } = useAppSelector(state => state.authDialog);
   const tempEmail =
     useAppSelector(state => state.auth.register.data?.data.user.email) || '';
 

@@ -7,7 +7,7 @@ import { closeDialog } from '@/src/features/auth-dialog/auth-dialog-slice';
 
 const AuthDialog = () => {
   const dispatch = useAppDispatch();
-  const { open, type } = useAppSelector(state => state.AuthDialog);
+  const { open, type } = useAppSelector(state => state.authDialog);
 
   const getFormType = () => {
     if (type === 'register') {
