@@ -20,6 +20,7 @@ import { logout } from '@/src/features/auth/auth-slice';
 import { useAppDispatch } from '@/src/hooks/redux-hooks';
 import { openDialog } from '@/src/features/auth-dialog/auth-dialog-slice';
 import { Button } from '../button';
+import Link from 'next/link';
 
 const Header = () => {
   const { profile, isAuthenticated } = useAppSelector(state => state.auth);
@@ -38,7 +39,10 @@ const Header = () => {
   return (
     <div className="flex justify-center items-center shadow-lg border-b">
       <div className="md:px-10 px-3 py-4 w-full max-w-5xl flex justify-between">
-        <div className="font-bold text-3xl text-orange-300">Cuitin</div>
+        <Link href="/">
+          <div className="font-bold text-3xl text-orange-300">Cuitin</div>
+        </Link>
+
         {isAuthenticated ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
