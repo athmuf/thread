@@ -6,7 +6,7 @@ const Comments = () => {
   const { data, isLoading, error } = useAppSelector(
     state => state.detailThread,
   );
-  const comments = data?.data.detailThread.comments || [];
+  const comments = (data?.data.detailThread.comments || []).slice().reverse();
 
   if (isLoading) {
     return <SkeletonThreads />;

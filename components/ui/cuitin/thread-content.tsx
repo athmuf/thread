@@ -4,8 +4,9 @@ import { useAppDispatch } from '@/src/hooks/redux-hooks';
 import { fetchUsers } from '@/src/features/users/users-slice';
 import { fetchDetailThread } from '@/src/features/detail-thread/detail-thread-slice';
 
-import Comments from './detail-thread/comments';
 import ViewThread from './view-thread';
+import Comments from './detail-thread/comments';
+import CreateComment from './detail-thread/create-comment';
 
 const ThreadContent = ({ id }: { id: string }) => {
   const dispatch = useAppDispatch();
@@ -18,6 +19,7 @@ const ThreadContent = ({ id }: { id: string }) => {
   return (
     <div className="w-full">
       <ViewThread />
+      <CreateComment />
       <Comments />
     </div>
   );

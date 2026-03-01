@@ -12,6 +12,10 @@ import {
   LoginProps,
 } from '../features/auth/types';
 import { RootDetailThread } from '../features/detail-thread/types';
+import {
+  CreateCommentPayload,
+  RootCreateComment,
+} from '../features/comment/types';
 
 export const fetchThreads = async (): Promise<RootThreads> => {
   const res = await api.get<RootThreads>('/threads');
@@ -51,5 +55,19 @@ export const login = async (data: LoginProps): Promise<RootLogin> => {
 
 export const getProfile = async (): Promise<RootUserProfile> => {
   const res = await api.get<RootUserProfile>('/users/me');
+  return res.data;
+};
+
+export const createComment = async ({
+  threadId,
+  data,
+}: {
+  threadId: string;
+  data: CreateCommentPayload;
+}): Promise<RootCreateComment> => {
+  const res = await api.post<RootCreateComment>(
+    `/threads/${threadId}/comments`,
+    data,
+  );
   return res.data;
 };
