@@ -16,6 +16,7 @@ import {
   CreateCommentPayload,
   RootCreateComment,
 } from '../features/comment/types';
+import { RootVote, VoteProps } from '../features/vote/types';
 
 export const fetchThreads = async (): Promise<RootThreads> => {
   const res = await api.get<RootThreads>('/threads');
@@ -68,6 +69,13 @@ export const createComment = async ({
   const res = await api.post<RootCreateComment>(
     `/threads/${threadId}/comments`,
     data,
+  );
+  return res.data;
+};
+
+export const voteThread = async (payload: VoteProps): Promise<RootVote> => {
+  const res = await api.post<RootVote>(
+    `/threads/${payload.threadId}/${payload.type}`,
   );
   return res.data;
 };

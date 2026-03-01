@@ -7,6 +7,11 @@ const initialState: DetailThreadState = {
   data: null,
   error: null,
   isLoading: true,
+  voteData: {
+    totalDownVote: 0,
+    totalUpVote: 0,
+    totalComment: 0,
+  },
 };
 
 const fetchDetailThread = createAsyncThunk<
@@ -26,9 +31,28 @@ const fetchDetailThread = createAsyncThunk<
 });
 
 const detailThreadSlice = createSlice({
-  name: 'threads',
+  name: 'detail-thread',
   initialState,
-  reducers: {},
+  reducers: {
+    updateVote: (
+      state,
+      action: {
+        payload: {
+          type: 'up' | 'down';
+          mode: 'add' | 'remove';
+        };
+      },
+    ) => {
+      const { type, mode } = action.payload;
+
+      if (type === 'up') {
+        state.voteData.totalUpVote += mode === 'add' ? 1 : -1;
+      }
+      if (type === 'down') {
+        state.voteData.totalDownVote += mode === 'add' ? 1 : -1;
+      }
+    },
+  },
   extraReducers: builder => {
     builder
       // Fetch threads data
@@ -38,6 +62,12 @@ const detailThreadSlice = createSlice({
       .addCase(fetchDetailThread.fulfilled, (state, action) => {
         state.isLoading = false;
         state.data = action.payload;
+        state.voteData.totalUpVote =
+          action.payload.data.detailThread.upVotesBy.length;
+        state.voteData.totalDownVote =
+          action.payload.data.detailThread.downVotesBy.length;
+        state.voteData.totalComment =
+          action.payload.data.detailThread.comments.length;
       })
       .addCase(fetchDetailThread.rejected, (state, action) => {
         state.isLoading = false;
@@ -47,4 +77,5 @@ const detailThreadSlice = createSlice({
 });
 
 export { fetchDetailThread };
+export const { updateVote } = detailThreadSlice.actions;
 export default detailThreadSlice.reducer;

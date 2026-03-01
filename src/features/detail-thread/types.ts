@@ -3,6 +3,13 @@ export interface DetailThreadState {
   data: RootDetailThread | null;
   error: string | null;
   isLoading: boolean;
+  voteData: VoteData;
+}
+
+export interface VoteData {
+  totalUpVote: number;
+  totalDownVote: number;
+  totalComment: number;
 }
 
 // Response detail thread types

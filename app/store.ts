@@ -5,6 +5,7 @@ import authSlice from '@/src/features/auth/auth-slice';
 import authDialogSlice from '@/src/features/auth-dialog/auth-dialog-slice';
 import detailthreadSlice from '@/src/features/detail-thread/detail-thread-slice';
 import createCommentSlice from '@/src/features/comment/comment-slice';
+import voteSlice from '@/src/features/vote/vote-slice';
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     authDialog: authDialogSlice,
     detailThread: detailthreadSlice,
     createComment: createCommentSlice,
+    vote: voteSlice,
   },
 });
 

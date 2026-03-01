@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Card,
   CardAction,
@@ -13,17 +15,43 @@ import { AvatarGroup } from '../avatar';
 import { formatRelativeTime } from '@/src/helper/format-relative-time';
 import _default from 'dompurify';
 import { MessageCircle, ThumbsDown, ThumbsUp } from 'lucide-react';
-import { useAppSelector } from '@/src/hooks/redux-hooks';
+import { useAppDispatch, useAppSelector } from '@/src/hooks/redux-hooks';
 import { selectUsersByIds } from '@/src/helper/format-name';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Separator } from '../separator';
 import ErrorState from './error-state';
 import SkeletonThreads from './skeleton-threads';
+import { updateVote } from '@/src/features/detail-thread/detail-thread-slice';
+import { voteThread } from '@/src/features/vote/vote-slice';
+
+type VoteType = 'neutral' | 'upVote' | 'downVote';
 
 const ViewThread = () => {
-  const { data, isLoading, error } = useAppSelector(
+  const dispatch = useAppDispatch();
+  const { data, isLoading, error, voteData } = useAppSelector(
     state => state.detailThread,
   );
+
+  const { profile } = useAppSelector(state => state.auth);
+
+  const [vote, setVote] = useState<VoteType>('neutral');
+
+  useEffect(() => {
+    if (profile?.id && data) {
+      const isUpVote =
+        data.data.detailThread.upVotesBy.includes(profile.id) ?? false;
+      const isDownVote =
+        data.data.detailThread.downVotesBy.includes(profile.id) ?? false;
+
+      if (isUpVote) {
+        setVote('upVote');
+      } else if (isDownVote) {
+        setVote('downVote');
+      } else {
+        setVote('neutral');
+      }
+    }
+  }, [profile?.id, data]);
 
   const thread = data?.data.detailThread;
 
@@ -43,6 +71,42 @@ const ViewThread = () => {
   }
 
   const cleanBodyContent = _default.sanitize(thread.body);
+
+  const handleVote = (type: VoteType) => {
+    if (!profile?.id) return;
+
+    const nextVote: VoteType = vote === type ? 'neutral' : type;
+
+    void dispatch(
+      voteThread({
+        threadId: thread.id,
+        type:
+          nextVote === 'neutral'
+            ? 'neutral-vote'
+            : nextVote === 'upVote'
+              ? 'up-vote'
+              : 'down-vote',
+      }),
+    );
+
+    // remove previous vote
+    if (vote === 'upVote') {
+      dispatch(updateVote({ type: 'up', mode: 'remove' }));
+    }
+    if (vote === 'downVote') {
+      dispatch(updateVote({ type: 'down', mode: 'remove' }));
+    }
+
+    // add new vote
+    if (nextVote === 'upVote') {
+      dispatch(updateVote({ type: 'up', mode: 'add' }));
+    }
+    if (nextVote === 'downVote') {
+      dispatch(updateVote({ type: 'down', mode: 'add' }));
+    }
+
+    setVote(nextVote);
+  };
 
   return (
     <Card className="shadow-none border-0 rounded-none py-3 gap-2">
@@ -76,13 +140,23 @@ const ViewThread = () => {
         </div>
       </CardFooter>
       <CardAction className="md:pl-16 pl-12">
-        <IconAction count={thread.upVotesBy.length}>
+        <IconAction
+          count={voteData.totalUpVote}
+          actionType="voteUp"
+          onClick={() => handleVote('upVote')}
+          active={vote === 'upVote'}
+        >
           <ThumbsUp />
         </IconAction>
-        <IconAction count={thread.downVotesBy.length}>
+        <IconAction
+          count={voteData.totalDownVote}
+          actionType="voteDown"
+          onClick={() => handleVote('downVote')}
+          active={vote === 'downVote'}
+        >
           <ThumbsDown />
         </IconAction>
-        <IconAction count={thread.comments.length}>
+        <IconAction count={voteData.totalComment} actionType="comment">
           <MessageCircle />
         </IconAction>
       </CardAction>
