@@ -21,9 +21,12 @@ import { useAppDispatch } from '@/src/hooks/redux-hooks';
 import { openDialog } from '@/src/features/auth-dialog/auth-dialog-slice';
 import { Button } from '../button';
 import Link from 'next/link';
+import ProfileDialog from '@/components/layout/profile-dialog';
+import { useState } from 'react';
 
 const Header = () => {
   const { profile, isAuthenticated } = useAppSelector(state => state.auth);
+  const [showProfile, setShowProfile] = useState(false);
 
   const dispatch = useAppDispatch();
 
@@ -60,7 +63,10 @@ const Header = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-40" align="start">
               <DropdownMenuGroup>
-                <DropdownMenuLabel className="flex hover:bg-slate-100 duration-200 cursor-pointer">
+                <DropdownMenuLabel
+                  className="flex hover:bg-slate-100 duration-200 cursor-pointer"
+                  onClick={() => setShowProfile(true)}
+                >
                   <User size={12} />
                   <span className="ml-2">Profile</span>
                 </DropdownMenuLabel>
@@ -73,6 +79,10 @@ const Header = () => {
                 </DropdownMenuLabel>
               </DropdownMenuGroup>
             </DropdownMenuContent>
+            <ProfileDialog
+              open={showProfile}
+              onOpenChange={() => setShowProfile(false)}
+            />
           </DropdownMenu>
         ) : (
           <Button
