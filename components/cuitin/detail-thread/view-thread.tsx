@@ -7,20 +7,20 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '../card';
-import { Badge } from '../badge';
-import IconAction from './icon-action';
-import ColoredAvatar from './colored-avatar';
-import { AvatarGroup } from '../avatar';
+} from '../../ui/card';
+import { Badge } from '../../ui/badge';
+import IconAction from '../icon-action';
+import ColoredAvatar from '../colored-avatar';
+import { AvatarGroup } from '../../ui/avatar';
 import { formatRelativeTime } from '@/src/helper/format-relative-time';
 import _default from 'dompurify';
 import { MessageCircle, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '@/src/hooks/redux-hooks';
 import { selectUsersByIds } from '@/src/helper/format-name';
 import { useEffect, useMemo, useState } from 'react';
-import { Separator } from '../separator';
-import ErrorState from './error-state';
-import SkeletonThreads from './skeleton-threads';
+import { Separator } from '../../ui/separator';
+import ErrorState from '../error-state';
+import SkeletonThreads from '../threads/skeleton-threads';
 import { updateVote } from '@/src/features/detail-thread/detail-thread-slice';
 import { voteThread } from '@/src/features/vote/vote-slice';
 import { openDialog } from '@/src/features/auth-dialog/auth-dialog-slice';

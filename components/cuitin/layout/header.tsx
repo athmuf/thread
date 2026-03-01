@@ -1,6 +1,6 @@
 'use client';
 
-import ColoredAvatar from './colored-avatar';
+import ColoredAvatar from '../colored-avatar';
 import {
   CircleUser,
   EllipsisVertical,
@@ -15,13 +15,13 @@ import {
   DropdownMenuGroup,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from '../dropdown-menu';
+} from '../../ui/dropdown-menu';
 import { logout } from '@/src/features/auth/auth-slice';
 import { useAppDispatch } from '@/src/hooks/redux-hooks';
 import { openDialog } from '@/src/features/auth-dialog/auth-dialog-slice';
-import { Button } from '../button';
+import { Button } from '../../ui/button';
 import Link from 'next/link';
-import ProfileDialog from '@/components/layout/profile-dialog';
+import ProfileDialog from '@/components/cuitin/layout/profile-dialog';
 import { useState } from 'react';
 
 const Header = () => {

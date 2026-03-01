@@ -1,8 +1,8 @@
 'use client';
 
-import { Dialog, DialogContent, DialogTitle } from '../ui/dialog';
+import { Dialog, DialogContent, DialogTitle } from '../../ui/dialog';
 import { useAppSelector } from '@/src/hooks/redux-hooks';
-import ColoredAvatar from '../ui/cuitin/colored-avatar';
+import ColoredAvatar from '../colored-avatar';
 
 type ProfileDialogProps = React.ComponentProps<typeof Dialog>;
 

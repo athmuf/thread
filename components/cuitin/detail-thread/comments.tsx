@@ -1,5 +1,5 @@
 import CommentCard from './comment-card';
-import SkeletonThreads from '../skeleton-threads';
+import SkeletonThreads from '../threads/skeleton-threads';
 import { useAppSelector } from '@/src/hooks/redux-hooks';
 
 const Comments = () => {

@@ -5,8 +5,8 @@ import { fetchUsers } from '@/src/features/users/users-slice';
 import { fetchDetailThread } from '@/src/features/detail-thread/detail-thread-slice';
 
 import ViewThread from './view-thread';
-import Comments from './detail-thread/comments';
-import CreateComment from './detail-thread/create-comment';
+import Comments from './comments';
+import CreateComment from './create-comment';
 
 const ThreadContent = ({ id }: { id: string }) => {
   const dispatch = useAppDispatch();

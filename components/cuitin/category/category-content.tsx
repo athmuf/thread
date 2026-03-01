@@ -1,6 +1,6 @@
 import CategoryThreads from './category-threads';
 import CategoryList from './category-list';
-import { Separator } from '../../separator';
+import { Separator } from '../../ui/separator';
 
 const CategoryContent = () => {
   return (

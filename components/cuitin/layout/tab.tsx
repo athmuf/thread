@@ -1,6 +1,6 @@
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Separator } from '../ui/separator';
-import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
+import { Separator } from '../../ui/separator';
+import { Tabs, TabsList, TabsTrigger } from '../../ui/tabs';
 
 const Tab = () => {
   const router = useRouter();

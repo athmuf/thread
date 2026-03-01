@@ -1,6 +1,6 @@
 import clsx from 'clsx';
-import { Card, CardContent } from '../../card';
-import { Separator } from '../../separator';
+import { Card, CardContent } from '../../ui/card';
+import { Separator } from '../../ui/separator';
 import ColoredAvatar from '../colored-avatar';
 import { Leaderboard } from '@/src/features/leaderboards/types';
 

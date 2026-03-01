@@ -5,11 +5,11 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '../card';
-import { Badge } from '../badge';
+} from '../ui/card';
+import { Badge } from '../ui/badge';
 import IconAction from './icon-action';
 import ColoredAvatar from './colored-avatar';
-import { AvatarGroup } from '../avatar';
+import { AvatarGroup } from '../ui/avatar';
 import { Thread as ThreadType } from '@/src/features/threads/types';
 import { formatRelativeTime } from '@/src/helper/format-relative-time';
 import _default from 'dompurify';
@@ -17,7 +17,7 @@ import { MessageCircle, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '@/src/hooks/redux-hooks';
 import { selectUserById, selectUsersByIds } from '@/src/helper/format-name';
 import { useEffect, useMemo, useState } from 'react';
-import { Separator } from '../separator';
+import { Separator } from '../ui/separator';
 import Link from 'next/link';
 import { voteThread } from '@/src/features/vote/vote-slice';
 import { updateVote } from '@/src/features/threads/threads-slice';

@@ -1,6 +1,6 @@
 import { Skeleton } from '@/components/ui/skeleton';
-import { Card, CardContent, CardHeader } from '../card';
-import { Separator } from '../separator';
+import { Card, CardContent, CardHeader } from '../../ui/card';
+import { Separator } from '../../ui/separator';
 
 const SkeletonThreads = () => {
   return (

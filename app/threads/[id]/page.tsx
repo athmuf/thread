@@ -1,4 +1,4 @@
-import ThreadContent from '@/components/ui/cuitin/thread-content';
+import ThreadContent from '@/components/cuitin/detail-thread/thread-content';
 
 export default async function DetailThread({
   params,

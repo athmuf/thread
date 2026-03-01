@@ -4,13 +4,13 @@ import {
   CardContent,
   CardFooter,
   CardHeader,
-} from '../../card';
+} from '../../ui/card';
 import IconAction from '../icon-action';
 import ColoredAvatar from '../colored-avatar';
 import { formatRelativeTime } from '@/src/helper/format-relative-time';
 import _default from 'dompurify';
 import { ThumbsDown, ThumbsUp } from 'lucide-react';
-import { Separator } from '../../separator';
+import { Separator } from '../../ui/separator';
 import { Comment } from '@/src/features/detail-thread/types';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/src/hooks/redux-hooks';

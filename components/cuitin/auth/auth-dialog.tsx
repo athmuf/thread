@@ -1,5 +1,5 @@
 'use client';
-import { Dialog } from '../dialog';
+import { Dialog } from '../../ui/dialog';
 import LoginForm from './login-form';
 import RegisterForm from './register-form';
 import { useAppSelector, useAppDispatch } from '@/src/hooks/redux-hooks';

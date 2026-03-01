@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { Badge } from '../../badge';
+import { Badge } from '../../ui/badge';
 import { useAppDispatch, useAppSelector } from '@/src/hooks/redux-hooks';
 import { setSelectedCategory } from '@/src/features/threads/threads-slice';
 

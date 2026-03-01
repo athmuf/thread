@@ -1,9 +1,9 @@
 'use client';
-import { Button } from '../../button';
+import { Button } from '../../ui/button';
 import { CircleUser } from 'lucide-react';
-import { Textarea } from '../../textarea';
+import { Textarea } from '../../ui/textarea';
 import ColoredAvatar from '../colored-avatar';
-import { Card, CardContent } from '../../card';
+import { Card, CardContent } from '../../ui/card';
 
 import * as z from 'zod';
 import { toast } from 'sonner';

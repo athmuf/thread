@@ -1,8 +1,8 @@
 import { useAppSelector } from '@/src/hooks/redux-hooks';
 
-import ErrorState from './error-state';
-import SkeletonThreads from './skeleton-threads';
-import LeaderboardsCard from './leaderboards/leaderboard-card';
+import ErrorState from '../error-state';
+import SkeletonThreads from '../threads/skeleton-threads';
+import LeaderboardsCard from './leaderboard-card';
 
 const Leaderboards = () => {
   const { data, isLoading, error } = useAppSelector(

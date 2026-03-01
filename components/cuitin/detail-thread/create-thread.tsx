@@ -1,11 +1,11 @@
 'use client';
-import { Input } from '../input';
-import { Button } from '../button';
-import { Textarea } from '../textarea';
-import { Separator } from '../separator';
+import { Input } from '../../ui/input';
+import { Button } from '../../ui/button';
+import { Textarea } from '../../ui/textarea';
+import { Separator } from '../../ui/separator';
 import { CircleUser, Plus } from 'lucide-react';
-import ColoredAvatar from './colored-avatar';
-import { Card, CardAction, CardContent } from '../card';
+import ColoredAvatar from '../colored-avatar';
+import { Card, CardAction, CardContent } from '../../ui/card';
 
 import * as z from 'zod';
 import { toast } from 'sonner';

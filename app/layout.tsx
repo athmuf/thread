@@ -2,8 +2,8 @@ import './globals.css';
 import type { Metadata } from 'next';
 import Providers from '@/src/providers/providers';
 import { Geist, Geist_Mono } from 'next/font/google';
-import AuthDialog from '@/components/ui/cuitin/auth-dialog';
-import Header from '@/components/ui/cuitin/header';
+import AuthDialog from '@/components/cuitin/auth/auth-dialog';
+import Header from '@/components/cuitin/layout/header';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',

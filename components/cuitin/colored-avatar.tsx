@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from '../avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { createInitial } from '@/src/helper/format-name';
 
 type UserProps = {

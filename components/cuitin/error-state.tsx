@@ -5,7 +5,7 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from '../empty';
+} from '../ui/empty';
 
 const ErrorState = () => {
   return (

@@ -6,12 +6,12 @@ import { useAppDispatch } from '@/src/hooks/redux-hooks';
 import { fetchThreads } from '@/src/features/threads/threads-slice';
 import { fetchUsers } from '@/src/features/users/users-slice';
 
-import Tab from '@/components/layout/tab';
-import Threads from '../components/ui/cuitin/thread-list';
-import { CreateThread } from '@/components/ui/cuitin/create-thread';
-import Leaderboards from '@/components/ui/cuitin/leaderboards';
+import Tab from '@/components/cuitin/layout/tab';
+import Threads from '../components/cuitin/threads/thread-list';
+import { CreateThread } from '@/components/cuitin/detail-thread/create-thread';
+import Leaderboards from '@/components/cuitin/leaderboards/leaderboards';
 import { fetchLeaderboards } from '@/src/features/leaderboards/leaederboards-slice';
-import CategoryContent from '@/components/ui/cuitin/category/category-content';
+import CategoryContent from '@/components/cuitin/category/category-content';
 
 export default function Home() {
   const dispatch = useAppDispatch();
