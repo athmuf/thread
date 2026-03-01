@@ -21,6 +21,7 @@ import { Separator } from '../separator';
 import Link from 'next/link';
 import { voteThread } from '@/src/features/vote/vote-slice';
 import { updateVote } from '@/src/features/threads/threads-slice';
+import { openDialog } from '@/src/features/auth-dialog/auth-dialog-slice';
 
 type ThreadCardProps = {
   thread: ThreadType;
@@ -62,68 +63,79 @@ const Thread = ({ thread }: ThreadCardProps) => {
     ),
   );
 
+  const handleLogin = () => {
+    dispatch(openDialog('login'));
+  };
+
   const handleVote = (type: VoteType) => {
-    if (!profile?.id) return;
+    if (!profile?.id) {
+      handleLogin();
+    } else {
+      const nextVote: VoteType = vote === type ? 'neutral' : type;
 
-    const nextVote: VoteType = vote === type ? 'neutral' : type;
-
-    void dispatch(
-      voteThread({
-        threadId: thread.id,
-        type:
-          nextVote === 'neutral'
-            ? 'neutral-vote'
-            : nextVote === 'upVote'
-              ? 'up-vote'
-              : 'down-vote',
-      }),
-    );
-
-    // Remove previous vote
-    if (vote === 'upVote') {
-      dispatch(
-        updateVote({
-          id: thread.id,
-          type: 'up',
-          mode: 'remove',
-          userId: profile.id,
+      void dispatch(
+        voteThread({
+          threadId: thread.id,
+          type:
+            nextVote === 'neutral'
+              ? 'neutral-vote'
+              : nextVote === 'upVote'
+                ? 'up-vote'
+                : 'down-vote',
         }),
       );
-    }
-    if (vote === 'downVote') {
-      dispatch(
-        updateVote({
-          id: thread.id,
-          type: 'down',
-          mode: 'remove',
-          userId: profile.id,
-        }),
-      );
-    }
 
-    // Add new vote
-    if (nextVote === 'upVote') {
-      dispatch(
-        updateVote({
-          id: thread.id,
-          type: 'up',
-          mode: 'add',
-          userId: profile.id,
-        }),
-      );
-    }
-    if (nextVote === 'downVote') {
-      dispatch(
-        updateVote({
-          id: thread.id,
-          type: 'down',
-          mode: 'add',
-          userId: profile.id,
-        }),
-      );
-    }
+      // Remove previous vote
+      if (vote === 'upVote') {
+        dispatch(
+          updateVote({
+            id: thread.id,
+            type: 'up',
+            mode: 'remove',
+            userId: profile.id,
+          }),
+        );
+      }
+      if (vote === 'downVote') {
+        dispatch(
+          updateVote({
+            id: thread.id,
+            type: 'down',
+            mode: 'remove',
+            userId: profile.id,
+          }),
+        );
+      }
 
-    setVote(nextVote);
+      // Add new vote
+      if (nextVote === 'upVote') {
+        dispatch(
+          updateVote({
+            id: thread.id,
+            type: 'up',
+            mode: 'add',
+            userId: profile.id,
+          }),
+        );
+      }
+      if (nextVote === 'downVote') {
+        dispatch(
+          updateVote({
+            id: thread.id,
+            type: 'down',
+            mode: 'add',
+            userId: profile.id,
+          }),
+        );
+      }
+      setVote(nextVote);
+    }
+  };
+
+  const handleComment = () => {
+    if (!profile?.id) {
+      handleLogin();
+    }
   };
 
   return (
@@ -182,9 +194,15 @@ const Thread = ({ thread }: ThreadCardProps) => {
         >
           <ThumbsDown />
         </IconAction>
-        <IconAction count={voteData.totalComment} actionType="comment">
-          <MessageCircle />
-        </IconAction>
+        <Link href={profile?.id ? `/threads/${thread.id}` : '/'}>
+          <IconAction
+            count={voteData.totalComment}
+            actionType="comment"
+            onClick={handleComment}
+          >
+            <MessageCircle />
+          </IconAction>
+        </Link>
       </CardAction>
       <Separator />
     </Card>

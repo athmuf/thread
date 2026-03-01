@@ -23,6 +23,7 @@ import ErrorState from './error-state';
 import SkeletonThreads from './skeleton-threads';
 import { updateVote } from '@/src/features/detail-thread/detail-thread-slice';
 import { voteThread } from '@/src/features/vote/vote-slice';
+import { openDialog } from '@/src/features/auth-dialog/auth-dialog-slice';
 
 type VoteType = 'neutral' | 'upVote' | 'downVote';
 
@@ -72,40 +73,52 @@ const ViewThread = () => {
 
   const cleanBodyContent = _default.sanitize(thread.body);
 
+  const handleLogin = () => {
+    dispatch(openDialog('login'));
+  };
+
   const handleVote = (type: VoteType) => {
-    if (!profile?.id) return;
+    if (!profile?.id) {
+      handleLogin();
+    } else {
+      const nextVote: VoteType = vote === type ? 'neutral' : type;
 
-    const nextVote: VoteType = vote === type ? 'neutral' : type;
+      void dispatch(
+        voteThread({
+          threadId: thread.id,
+          type:
+            nextVote === 'neutral'
+              ? 'neutral-vote'
+              : nextVote === 'upVote'
+                ? 'up-vote'
+                : 'down-vote',
+        }),
+      );
 
-    void dispatch(
-      voteThread({
-        threadId: thread.id,
-        type:
-          nextVote === 'neutral'
-            ? 'neutral-vote'
-            : nextVote === 'upVote'
-              ? 'up-vote'
-              : 'down-vote',
-      }),
-    );
+      // remove previous vote
+      if (vote === 'upVote') {
+        dispatch(updateVote({ type: 'up', mode: 'remove' }));
+      }
+      if (vote === 'downVote') {
+        dispatch(updateVote({ type: 'down', mode: 'remove' }));
+      }
 
-    // remove previous vote
-    if (vote === 'upVote') {
-      dispatch(updateVote({ type: 'up', mode: 'remove' }));
+      // add new vote
+      if (nextVote === 'upVote') {
+        dispatch(updateVote({ type: 'up', mode: 'add' }));
+      }
+      if (nextVote === 'downVote') {
+        dispatch(updateVote({ type: 'down', mode: 'add' }));
+      }
+
+      setVote(nextVote);
     }
-    if (vote === 'downVote') {
-      dispatch(updateVote({ type: 'down', mode: 'remove' }));
-    }
+  };
 
-    // add new vote
-    if (nextVote === 'upVote') {
-      dispatch(updateVote({ type: 'up', mode: 'add' }));
+  const handleComment = () => {
+    if (!profile?.id) {
+      handleLogin();
     }
-    if (nextVote === 'downVote') {
-      dispatch(updateVote({ type: 'down', mode: 'add' }));
-    }
-
-    setVote(nextVote);
   };
 
   return (
@@ -156,7 +169,11 @@ const ViewThread = () => {
         >
           <ThumbsDown />
         </IconAction>
-        <IconAction count={voteData.totalComment} actionType="comment">
+        <IconAction
+          count={voteData.totalComment}
+          actionType="comment"
+          onClick={handleComment}
+        >
           <MessageCircle />
         </IconAction>
       </CardAction>

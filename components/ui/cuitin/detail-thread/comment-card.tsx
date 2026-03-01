@@ -16,6 +16,7 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/src/hooks/redux-hooks';
 import { voteComment } from '@/src/features/vote/vote-slice';
 import { updateCommentVote } from '@/src/features/detail-thread/detail-thread-slice';
+import { openDialog } from '@/src/features/auth-dialog/auth-dialog-slice';
 
 type CommentCardProps = {
   data: Comment;
@@ -56,69 +57,75 @@ const CommentCard = ({ data }: CommentCardProps) => {
     }
   }, [profile?.id, upVotesBy, downVotesBy]);
 
+  const handleLogin = () => {
+    dispatch(openDialog('login'));
+  };
+
   const handleVote = (type: VoteType) => {
-    if (!profile?.id) return;
+    if (!profile?.id) {
+      handleLogin();
+    } else {
+      const nextVote: VoteType = vote === type ? 'neutral' : type;
 
-    const nextVote: VoteType = vote === type ? 'neutral' : type;
-
-    void dispatch(
-      voteComment({
-        threadId: threadId,
-        commentId: commentId,
-        type:
-          nextVote === 'neutral'
-            ? 'neutral-vote'
-            : nextVote === 'upVote'
-              ? 'up-vote'
-              : 'down-vote',
-      }),
-    );
-
-    // Remove previous vote
-    if (vote === 'upVote') {
-      dispatch(
-        updateCommentVote({
-          id: commentId,
-          type: 'up',
-          mode: 'remove',
-          userId: profile.id,
+      void dispatch(
+        voteComment({
+          threadId: threadId,
+          commentId: commentId,
+          type:
+            nextVote === 'neutral'
+              ? 'neutral-vote'
+              : nextVote === 'upVote'
+                ? 'up-vote'
+                : 'down-vote',
         }),
       );
-    }
-    if (vote === 'downVote') {
-      dispatch(
-        updateCommentVote({
-          id: commentId,
-          type: 'down',
-          mode: 'remove',
-          userId: profile.id,
-        }),
-      );
-    }
 
-    // Add new vote
-    if (nextVote === 'upVote') {
-      dispatch(
-        updateCommentVote({
-          id: commentId,
-          type: 'up',
-          mode: 'add',
-          userId: profile.id,
-        }),
-      );
-    }
-    if (nextVote === 'downVote') {
-      dispatch(
-        updateCommentVote({
-          id: commentId,
-          type: 'down',
-          mode: 'add',
-          userId: profile.id,
-        }),
-      );
-    }
+      // Remove previous vote
+      if (vote === 'upVote') {
+        dispatch(
+          updateCommentVote({
+            id: commentId,
+            type: 'up',
+            mode: 'remove',
+            userId: profile.id,
+          }),
+        );
+      }
+      if (vote === 'downVote') {
+        dispatch(
+          updateCommentVote({
+            id: commentId,
+            type: 'down',
+            mode: 'remove',
+            userId: profile.id,
+          }),
+        );
+      }
 
-    setVote(nextVote);
+      // Add new vote
+      if (nextVote === 'upVote') {
+        dispatch(
+          updateCommentVote({
+            id: commentId,
+            type: 'up',
+            mode: 'add',
+            userId: profile.id,
+          }),
+        );
+      }
+      if (nextVote === 'downVote') {
+        dispatch(
+          updateCommentVote({
+            id: commentId,
+            type: 'down',
+            mode: 'add',
+            userId: profile.id,
+          }),
+        );
+      }
+
+      setVote(nextVote);
+    }
   };
 
   return (
