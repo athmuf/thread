@@ -74,13 +74,13 @@ const Thread = ({ thread }: ThreadCardProps) => {
           </div>
         </CardFooter>
         <CardAction className="md:pl-16 pl-12">
-          <IconAction count={thread.upVotesBy.length}>
+          <IconAction count={thread.upVotesBy.length} type="voteUp">
             <ThumbsUp />
           </IconAction>
-          <IconAction count={thread.downVotesBy.length}>
+          <IconAction count={thread.downVotesBy.length} type="voteDown">
             <ThumbsDown />
           </IconAction>
-          <IconAction count={thread.totalComments}>
+          <IconAction count={thread.totalComments} type="comment">
             <MessageCircle />
           </IconAction>
         </CardAction>

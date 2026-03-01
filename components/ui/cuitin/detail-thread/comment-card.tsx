@@ -39,10 +39,10 @@ const CommentCard = ({ data }: CommentCardProps) => {
         </div>
       </CardFooter>
       <CardAction className="md:pl-16 pl-12">
-        <IconAction count={upVotesBy.length}>
+        <IconAction count={upVotesBy.length} type="voteUp">
           <ThumbsUp />
         </IconAction>
-        <IconAction count={downVotesBy.length}>
+        <IconAction count={downVotesBy.length} type="voteDown">
           <ThumbsDown />
         </IconAction>
       </CardAction>
