@@ -52,6 +52,41 @@ const detailThreadSlice = createSlice({
         state.voteData.totalDownVote += mode === 'add' ? 1 : -1;
       }
     },
+    updateCommentVote: (
+      state,
+      action: {
+        payload: {
+          id: string;
+          type: 'up' | 'down';
+          mode: 'add' | 'remove';
+          userId: string;
+        };
+      },
+    ) => {
+      const { id, type, mode, userId } = action.payload;
+
+      const thread = state.data?.data.detailThread.comments.find(
+        t => t.id === id,
+      );
+      if (!thread) return;
+
+      if (type === 'up') {
+        thread.voteData.totalUpVote += mode === 'add' ? 1 : -1;
+        if (mode === 'add') {
+          thread.upVotesBy.push(userId);
+        } else {
+          thread.upVotesBy = thread.upVotesBy.filter(uid => uid !== userId);
+        }
+      }
+      if (type === 'down') {
+        thread.voteData.totalDownVote += mode === 'add' ? 1 : -1;
+        if (mode === 'add') {
+          thread.downVotesBy.push(userId);
+        } else {
+          thread.downVotesBy = thread.downVotesBy.filter(uid => uid !== userId);
+        }
+      }
+    },
   },
   extraReducers: builder => {
     builder
@@ -62,12 +97,24 @@ const detailThreadSlice = createSlice({
       .addCase(fetchDetailThread.fulfilled, (state, action) => {
         state.isLoading = false;
         state.data = action.payload;
+
+        // Set vote data thread
         state.voteData.totalUpVote =
           action.payload.data.detailThread.upVotesBy.length;
         state.voteData.totalDownVote =
           action.payload.data.detailThread.downVotesBy.length;
         state.voteData.totalComment =
           action.payload.data.detailThread.comments.length;
+
+        // set Vote data comment
+        state.data.data.detailThread.comments =
+          action.payload.data.detailThread.comments.map(comment => ({
+            ...comment,
+            voteData: {
+              totalUpVote: comment.upVotesBy.length,
+              totalDownVote: comment.downVotesBy.length,
+            },
+          }));
       })
       .addCase(fetchDetailThread.rejected, (state, action) => {
         state.isLoading = false;
@@ -77,5 +124,5 @@ const detailThreadSlice = createSlice({
 });
 
 export { fetchDetailThread };
-export const { updateVote } = detailThreadSlice.actions;
+export const { updateVote, updateCommentVote } = detailThreadSlice.actions;
 export default detailThreadSlice.reducer;

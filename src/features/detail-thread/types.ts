@@ -48,6 +48,12 @@ export interface Comment {
   owner: Owner2;
   upVotesBy: string[];
   downVotesBy: string[];
+  voteData: VoteData2;
+}
+
+export interface VoteData2 {
+  totalUpVote: number;
+  totalDownVote: number;
 }
 
 export interface Owner2 {

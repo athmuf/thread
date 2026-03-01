@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { VoteState, RootVote, VoteProps } from './types';
+import { VoteState, RootVote, VoteProps, VoteCommentProps } from './types';
 import * as api from '@/src/utils/api';
 import { AxiosError } from 'axios';
 
@@ -23,6 +23,20 @@ const voteThread = createAsyncThunk<
   }
 });
 
+const voteComment = createAsyncThunk<
+  RootVote,
+  VoteCommentProps,
+  { rejectValue: string }
+>('vote/sendVoteComment', async (data, { rejectWithValue }) => {
+  try {
+    const res = await api.voteComment(data);
+    return res;
+  } catch (error: unknown) {
+    const err = error as AxiosError<{ message: string }>;
+    return rejectWithValue(err.response?.data?.message || 'Failed vote');
+  }
+});
+
 const voteSlice = createSlice({
   name: 'vote',
   initialState,
@@ -39,9 +53,21 @@ const voteSlice = createSlice({
       .addCase(voteThread.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
+      })
+
+      // Fetch threads data
+      .addCase(voteComment.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(voteComment.fulfilled, state => {
+        state.isLoading = false;
+      })
+      .addCase(voteComment.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
       });
   },
 });
 
-export { voteThread };
+export { voteThread, voteComment };
 export default voteSlice.reducer;

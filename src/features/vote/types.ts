@@ -3,6 +3,12 @@ export interface VoteProps {
   type: 'up-vote' | 'down-vote' | 'neutral-vote';
 }
 
+export interface VoteCommentProps {
+  threadId: string;
+  commentId: string;
+  type: 'up-vote' | 'down-vote' | 'neutral-vote';
+}
+
 // Response vote thread
 export interface RootVote {
   status: string;
