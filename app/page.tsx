@@ -7,7 +7,6 @@ import { fetchUsers } from '@/src/features/users/users-slice';
 
 import Threads from '../components/ui/cuitin/thread-list';
 import { CreateThread } from '@/components/ui/cuitin/create-thread';
-import FloatingButton from '@/components/ui/cuitin/floating-button';
 
 export default function Home() {
   const dispatch = useAppDispatch();
@@ -21,7 +20,6 @@ export default function Home() {
     <div className="w-full">
       <CreateThread />
       <Threads />
-      <FloatingButton />
     </div>
   );
 }
