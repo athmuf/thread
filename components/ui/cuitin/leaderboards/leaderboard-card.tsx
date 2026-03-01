@@ -27,9 +27,11 @@ const LeaderboardCard = ({ data, index }: LeaderboardProps) => {
             <ColoredAvatar data={data.user} />
             <span className="ml-3">{data.user.name}</span>
           </div>
-          <Separator orientation="vertical" className="absolute right-10" />
+          <Separator orientation="vertical" className="absolute right-0" />
         </div>
-        <div className="w-1/6 md:w-1/12 items-center">{data.score}</div>
+        <div className="w-1/6 md:w-1/12 flex items-center justify-end">
+          {data.score}
+        </div>
       </CardContent>
     </Card>
   );

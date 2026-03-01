@@ -23,9 +23,15 @@ const Tab = () => {
         onValueChange={handleChange}
       >
         <TabsList variant="line" className="w-full max-w-96">
-          <TabsTrigger value="news">News</TabsTrigger>
-          <TabsTrigger value="category">Category</TabsTrigger>
-          <TabsTrigger value="leaderboard">Leaderboards</TabsTrigger>
+          <TabsTrigger value="news" className="cursor-pointer">
+            News
+          </TabsTrigger>
+          <TabsTrigger value="category" className="cursor-pointer">
+            Category
+          </TabsTrigger>
+          <TabsTrigger value="leaderboard" className="cursor-pointer">
+            Leaderboards
+          </TabsTrigger>
         </TabsList>
       </Tabs>
       <Separator />
