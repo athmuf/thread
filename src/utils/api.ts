@@ -90,7 +90,9 @@ export const voteComment = async (
   return res.data;
 };
 
-export const fetchLeaderboards = async (): Promise<RootLeaderboards> => {
-  const res = await api.get<RootLeaderboards>('/leaderboards');
+export const fetchLeaderboards = async (
+  signal?: AbortSignal,
+): Promise<RootLeaderboards> => {
+  const res = await api.get<RootLeaderboards>('/leaderboards', { signal });
   return res.data;
 };

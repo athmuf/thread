@@ -1,4 +1,4 @@
-import Thread from '../thread';
+import Thread from './thread';
 import SkeletonThreads from './skeleton-threads';
 import { useAppSelector } from '@/src/hooks/redux-hooks';
 import ErrorState from '../error-state';

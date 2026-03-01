@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { LeaderboardsState, RootLeaderboards } from './types';
 import * as api from '@/src/utils/api';
-import { AxiosError } from 'axios';
+import axios, { AxiosError } from 'axios';
 
 const initialState: LeaderboardsState = {
   data: null,
@@ -13,11 +13,12 @@ const fetchLeaderboards = createAsyncThunk<
   RootLeaderboards,
   void,
   { rejectValue: string }
->('leaderboards/fetchLeaderboards', async (_, { rejectWithValue }) => {
+>('leaderboards/fetchLeaderboards', async (_, { rejectWithValue, signal }) => {
   try {
-    const res = await api.fetchLeaderboards();
+    const res = await api.fetchLeaderboards(signal);
     return res;
   } catch (error: unknown) {
+    if (axios.isCancel(error)) return rejectWithValue('Request canceled');
     const err = error as AxiosError<{ message: string }>;
     return rejectWithValue(
       err.response?.data?.message || 'Failed fetch leaderboards data',
