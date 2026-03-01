@@ -5,6 +5,12 @@ export interface ThreadsState {
   isLoading: boolean;
 }
 
+export interface VoteData {
+  totalUpVote: number;
+  totalDownVote: number;
+  totalComment: number;
+}
+
 // Create thread props
 export interface CreateThreadProps {
   title: string;
@@ -33,6 +39,7 @@ export interface Thread {
   upVotesBy: string[];
   downVotesBy: string[];
   totalComments: number;
+  voteData: VoteData;
 }
 
 // Response create thread data API types

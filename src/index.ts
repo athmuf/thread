@@ -5,7 +5,7 @@ const longString =
 
 const trailing = 'Semicolon';
 
-const why = {am: 'I tabbed?'};
+const why = { am: 'I tabbed?' };
 
 const iWish = "I didn't have a trailing space...";
 

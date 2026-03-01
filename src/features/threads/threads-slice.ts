@@ -49,7 +49,41 @@ const createThreads = createAsyncThunk<
 const threadsSlice = createSlice({
   name: 'threads',
   initialState,
-  reducers: {},
+  reducers: {
+    updateVote: (
+      state,
+      action: {
+        payload: {
+          id: string;
+          type: 'up' | 'down';
+          mode: 'add' | 'remove';
+          userId: string;
+        };
+      },
+    ) => {
+      const { id, type, mode, userId } = action.payload;
+
+      const thread = state.data.find(t => t.id === id);
+      if (!thread) return;
+
+      if (type === 'up') {
+        thread.voteData.totalUpVote += mode === 'add' ? 1 : -1;
+        if (mode === 'add') {
+          thread.upVotesBy.push(userId);
+        } else {
+          thread.upVotesBy = thread.upVotesBy.filter(uid => uid !== userId);
+        }
+      }
+      if (type === 'down') {
+        thread.voteData.totalDownVote += mode === 'add' ? 1 : -1;
+        if (mode === 'add') {
+          thread.downVotesBy.push(userId);
+        } else {
+          thread.downVotesBy = thread.downVotesBy.filter(uid => uid !== userId);
+        }
+      }
+    },
+  },
   extraReducers: builder => {
     builder
       // Fetch threads data
@@ -58,7 +92,15 @@ const threadsSlice = createSlice({
       })
       .addCase(fetchThreads.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.data = action.payload.data.threads;
+
+        state.data = action.payload.data.threads.map(thread => ({
+          ...thread,
+          voteData: {
+            totalUpVote: thread.upVotesBy.length,
+            totalDownVote: thread.downVotesBy.length,
+            totalComment: thread.totalComments,
+          },
+        }));
       })
       .addCase(fetchThreads.rejected, (state, action) => {
         state.isLoading = false;
@@ -68,4 +110,5 @@ const threadsSlice = createSlice({
 });
 
 export { fetchThreads, createThreads };
+export const { updateVote } = threadsSlice.actions;
 export default threadsSlice.reducer;
