@@ -7,11 +7,14 @@ import {
 } from './types';
 import * as api from '@/src/utils/api';
 import { AxiosError } from 'axios';
+import { RootState } from '@/app/store';
 
 const initialState: ThreadsState = {
   data: [],
   error: null,
   isLoading: true,
+  selectedCategory: 'all',
+  categories: [],
 };
 
 const fetchThreads = createAsyncThunk<
@@ -45,6 +48,14 @@ const createThreads = createAsyncThunk<
     );
   }
 });
+
+export const selectFilteredThreads = (state: RootState) => {
+  const { data, selectedCategory } = state.threads;
+
+  if (selectedCategory === 'all') return data;
+
+  return data.filter(thread => thread.category === selectedCategory);
+};
 
 const threadsSlice = createSlice({
   name: 'threads',
@@ -83,6 +94,9 @@ const threadsSlice = createSlice({
         }
       }
     },
+    setSelectedCategory: (state, action: { payload: string }) => {
+      state.selectedCategory = action.payload;
+    },
   },
   extraReducers: builder => {
     builder
@@ -93,7 +107,7 @@ const threadsSlice = createSlice({
       .addCase(fetchThreads.fulfilled, (state, action) => {
         state.isLoading = false;
 
-        state.data = action.payload.data.threads.map(thread => ({
+        const mappedThreads = action.payload.data.threads.map(thread => ({
           ...thread,
           voteData: {
             totalUpVote: thread.upVotesBy.length,
@@ -101,6 +115,14 @@ const threadsSlice = createSlice({
             totalComment: thread.totalComments,
           },
         }));
+
+        state.data = mappedThreads;
+
+        const uniqueCategories = [
+          ...new Set(mappedThreads.map(thread => thread.category)),
+        ];
+
+        state.categories = ['all', ...uniqueCategories];
       })
       .addCase(fetchThreads.rejected, (state, action) => {
         state.isLoading = false;
@@ -110,5 +132,5 @@ const threadsSlice = createSlice({
 });
 
 export { fetchThreads, createThreads };
-export const { updateVote } = threadsSlice.actions;
+export const { updateVote, setSelectedCategory } = threadsSlice.actions;
 export default threadsSlice.reducer;

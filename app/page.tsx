@@ -11,6 +11,7 @@ import Threads from '../components/ui/cuitin/thread-list';
 import { CreateThread } from '@/components/ui/cuitin/create-thread';
 import Leaderboards from '@/components/ui/cuitin/leaderboards';
 import { fetchLeaderboards } from '@/src/features/leaderboards/leaederboards-slice';
+import CategoryContent from '@/components/ui/cuitin/category/category-content';
 
 export default function Home() {
   const dispatch = useAppDispatch();
@@ -25,7 +26,7 @@ export default function Home() {
 
   const renderTab = () => {
     if (currentTab === 'category') {
-      return null;
+      return <CategoryContent />;
     } else if (currentTab === 'leaderboard') {
       return <Leaderboards />;
     } else {

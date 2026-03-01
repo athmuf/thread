@@ -3,6 +3,8 @@ export interface ThreadsState {
   data: Thread[];
   error: string | null;
   isLoading: boolean;
+  selectedCategory: string;
+  categories: string[];
 }
 
 export interface VoteData {
