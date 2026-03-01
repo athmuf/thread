@@ -6,6 +6,7 @@ import authDialogSlice from '@/src/features/auth-dialog/auth-dialog-slice';
 import detailthreadSlice from '@/src/features/detail-thread/detail-thread-slice';
 import createCommentSlice from '@/src/features/comment/comment-slice';
 import voteSlice from '@/src/features/vote/vote-slice';
+import leaderboardsSlice from '@/src/features/leaderboards/leaederboards-slice';
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     detailThread: detailthreadSlice,
     createComment: createCommentSlice,
     vote: voteSlice,
+    leaderboards: leaderboardsSlice,
   },
 });
 

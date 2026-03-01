@@ -61,7 +61,7 @@ export const CreateThread = () => {
   const { profile, isAuthenticated } = useAppSelector(state => state.auth);
   if (isAuthenticated)
     return (
-      <Card className="shadow-none border-x-0 border-t-0 rounded-none py-3 gap-2">
+      <Card className="shadow-none border-x-0 border-t-0 rounded-none py-6 gap-2">
         <form onSubmit={threadForm.handleSubmit(onSubmit)}>
           <CardContent className="flex px-2 md:px-6">
             {profile ? (
