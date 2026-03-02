@@ -3,7 +3,7 @@ import threadsSlice from '@/src/features/threads/threads-slice';
 import usersSlice from '@/src/features/users/users-slice';
 import authSlice from '@/src/features/auth/auth-slice';
 import authDialogSlice from '@/src/features/auth-dialog/auth-dialog-slice';
-import detailthreadSlice from '@/src/features/detail-thread/detail-thread-slice';
+import detailThreadSlice from '@/src/features/detail-thread/detail-thread-slice';
 import createCommentSlice from '@/src/features/comment/comment-slice';
 import voteSlice from '@/src/features/vote/vote-slice';
 import leaderboardsSlice from '@/src/features/leaderboards/leaederboards-slice';
@@ -14,7 +14,7 @@ const store = configureStore({
     users: usersSlice,
     auth: authSlice,
     authDialog: authDialogSlice,
-    detailThread: detailthreadSlice,
+    detailThread: detailThreadSlice,
     createComment: createCommentSlice,
     vote: voteSlice,
     leaderboards: leaderboardsSlice,
