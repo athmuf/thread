@@ -29,6 +29,22 @@ const initialState = {
       category: 'General',
       createdAt: '2021-06-21T07:00:00.000Z',
       ownerId: 'users-1',
+      upVotesBy: ['user-1'],
+      downVotesBy: ['user-2', 'user-3'],
+      totalComments: 2,
+      voteData: {
+        totalUpVote: 1,
+        totalDownVote: 2,
+        totalComment: 2,
+      },
+    },
+    {
+      id: 'thread-2',
+      title: 'Thread Kedua',
+      body: 'Ini adalah thread Kedua',
+      category: 'Global',
+      createdAt: '2021-06-21T07:00:00.000Z',
+      ownerId: 'users-2',
       upVotesBy: [],
       downVotesBy: [],
       totalComments: 0,
@@ -42,7 +58,7 @@ const initialState = {
   error: null,
   isLoading: false,
   selectedCategory: 'all',
-  categories: ['all', 'redux'],
+  categories: ['all', 'General', 'Global'],
 };
 
 describe('threadSlice reducer', () => {
@@ -63,28 +79,18 @@ describe('threadSlice reducer', () => {
         userId: 'user-1',
       }),
     );
-    expect(nextState.data[0].voteData.totalUpVote).toBe(1);
-    expect(nextState.data[0].upVotesBy).toContain('user-1');
+    const updatedThread = nextState.data.find(
+      thread => thread.id === 'thread-1',
+    )!;
+
+    expect(updatedThread.voteData.totalUpVote).toBe(2);
+    expect(updatedThread.upVotesBy).toContain('user-1');
   });
 
   // updateVote - upvote remove
   it('should remove upvote correctly', () => {
-    const stateWithVote = {
-      ...initialState,
-      data: [
-        {
-          ...initialState.data[0],
-          upVotesBy: ['user-1'],
-          voteData: {
-            ...initialState.data[0].voteData,
-            totalUpVote: 1,
-          },
-        },
-      ],
-    };
-
     const nextState = reducer(
-      stateWithVote,
+      initialState,
       updateVote({
         id: 'thread-1',
         type: 'up',
@@ -93,7 +99,72 @@ describe('threadSlice reducer', () => {
       }),
     );
 
-    expect(nextState.data[0].voteData.totalUpVote).toBe(0);
-    expect(nextState.data[0].upVotesBy).not.toContain('user-1');
+    const updatedThread = nextState.data.find(
+      thread => thread.id === 'thread-1',
+    )!;
+
+    expect(updatedThread.voteData.totalUpVote).toBe(0);
+    expect(updatedThread.upVotesBy).not.toContain('user-1');
+  });
+
+  // updateVote - downvote add
+  it('should add downvote correctly', () => {
+    const nextState = reducer(
+      initialState,
+      updateVote({
+        id: 'thread-2',
+        type: 'down',
+        mode: 'add',
+        userId: 'user-1',
+      }),
+    );
+    const updatedThread = nextState.data.find(
+      thread => thread.id === 'thread-2',
+    )!;
+
+    expect(updatedThread.voteData.totalDownVote).toBe(1);
+    expect(updatedThread.downVotesBy).toContain('user-1');
+  });
+
+  // updateVote - downvote remove
+  it('should remove downvote correctly', () => {
+    const nextState = reducer(
+      initialState,
+      updateVote({
+        id: 'thread-1',
+        type: 'down',
+        mode: 'remove',
+        userId: 'user-2',
+      }),
+    );
+
+    const updatedThread = nextState.data.find(
+      thread => thread.id === 'thread-1',
+    )!;
+
+    expect(updatedThread.voteData.totalDownVote).toBe(1);
+    expect(updatedThread.upVotesBy).not.toContain('user-2');
+  });
+
+  // updateVote - upvote thread id not found
+  it('should not change state when thread id is not found', () => {
+    const nextState = reducer(
+      initialState,
+      updateVote({
+        id: 'thread-3',
+        type: 'up',
+        mode: 'add',
+        userId: 'user-3',
+      }),
+    );
+
+    expect(nextState).toEqual(initialState);
+  });
+
+  // 🔹 setSelectedCategory
+  it('should change selectedCategory correctly', () => {
+    const nextState = reducer(initialState, setSelectedCategory('frontend'));
+
+    expect(nextState.selectedCategory).toBe('frontend');
   });
 });
