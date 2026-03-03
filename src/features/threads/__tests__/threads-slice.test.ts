@@ -1,5 +1,10 @@
-import { describe, it, expect } from 'vitest';
-import reducer, { updateVote, setSelectedCategory } from '../threads-slice';
+import * as api from '@/src/utils/api';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import reducer, {
+  updateVote,
+  setSelectedCategory,
+  fetchThreads,
+} from '../threads-slice';
 
 /**
  * test scenario for threadSlice
@@ -166,5 +171,66 @@ describe('threadSlice reducer', () => {
     const nextState = reducer(initialState, setSelectedCategory('frontend'));
 
     expect(nextState.selectedCategory).toBe('frontend');
+  });
+});
+
+const mockThreadsResponse = {
+  status: 'success',
+  message: 'ok',
+  data: {
+    threads: [
+      {
+        id: 'thread-1',
+        title: 'Thread Pertama',
+        body: 'Ini adalah thread pertama',
+        category: 'General',
+        createdAt: '2021-06-21T07:00:00.000Z',
+        ownerId: 'users-1',
+        upVotesBy: [],
+        downVotesBy: [],
+        totalComments: 0,
+        voteData: {
+          totalUpVote: 0,
+          totalDownVote: 0,
+          totalComment: 0,
+        },
+      },
+      {
+        id: 'thread-2',
+        title: 'Thread Kedua',
+        body: 'Ini adalah thread kedua',
+        category: 'General',
+        createdAt: '2021-06-21T07:00:00.000Z',
+        ownerId: 'users-2',
+        upVotesBy: [],
+        downVotesBy: [],
+        totalComments: 0,
+        voteData: {
+          totalUpVote: 0,
+          totalDownVote: 0,
+          totalComment: 0,
+        },
+      },
+    ],
+  },
+};
+
+describe('fetchThreads createAsyncThunk', () => {
+  it('should call api.fetchThreads and handle fulfilled', async () => {
+    const fetchSpy = vi
+      .spyOn(api, 'fetchThreads')
+      .mockResolvedValue(mockThreadsResponse);
+
+    // call thunk manually
+    const result = await fetchThreads(null, {
+      dispatch: vi.fn(),
+      getState: vi.fn(),
+      rejectWithValue: vi.fn(),
+    } as any);
+
+    expect(fetchSpy).toHaveBeenCalled();
+    expect(result.payload).toEqual(mockThreadsResponse);
+
+    fetchSpy.mockRestore(); // kembalikan ke original
   });
 });
