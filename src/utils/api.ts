@@ -1,6 +1,6 @@
 import api from '../config/axios';
 import {
-  RootThreads,
+  RootThreadsApi,
   RootCreateThread,
   CreateThreadProps,
 } from '../features/threads/types';
@@ -19,8 +19,8 @@ import {
 import { RootVote, VoteCommentProps, VoteProps } from '../features/vote/types';
 import { RootLeaderboards } from '../features/leaderboards/types';
 
-export const fetchThreads = async (): Promise<RootThreads> => {
-  const res = await api.get<RootThreads>('/threads');
+export const fetchThreads = async (): Promise<RootThreadsApi> => {
+  const res = await api.get<RootThreadsApi>('/threads');
   return res.data;
 };
 

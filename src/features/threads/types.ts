@@ -54,3 +54,26 @@ export interface RootCreateThread {
 export interface Data2 {
   thread: Thread;
 }
+
+// Response pure from API
+export interface RootThreadsApi {
+  status: string;
+  message: string;
+  data: Data3;
+}
+
+export interface Data3{
+  threads: Thread2[];
+}
+
+export interface Thread2 {
+  id: string;
+  title: string;
+  body: string;
+  category: string;
+  createdAt: string;
+  ownerId: string;
+  upVotesBy: string[];
+  downVotesBy: string[];
+  totalComments: number;
+}

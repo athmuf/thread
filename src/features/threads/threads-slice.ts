@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {
   ThreadsState,
-  RootThreads,
   RootCreateThread,
   CreateThreadProps,
+  RootThreadsApi,
 } from './types';
 import * as api from '@/src/utils/api';
 import { AxiosError } from 'axios';
@@ -18,7 +18,7 @@ const initialState: ThreadsState = {
 };
 
 const fetchThreads = createAsyncThunk<
-  RootThreads,
+  RootThreadsApi,
   void,
   { rejectValue: string }
 >('threads/fetchThreads', async (_, { rejectWithValue }) => {

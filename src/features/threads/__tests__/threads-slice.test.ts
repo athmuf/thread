@@ -5,6 +5,9 @@ import reducer, {
   setSelectedCategory,
   fetchThreads,
 } from '../threads-slice';
+import store from '@/app/store';
+import { configureStore } from '@reduxjs/toolkit';
+import { RootThreadsApi } from '../types';
 
 /**
  * test scenario for threadSlice
@@ -174,6 +177,24 @@ describe('threadSlice reducer', () => {
   });
 });
 
+/**
+ * test scenario for threadSlice
+ *
+ * - fetchThreads async thunk
+ *   - should dispatch action correctly when data fetching success
+ *   - should dispatch action correctly when data fetching failed
+ *   - should use fallback error message when response has no message
+ *
+ */
+
+// Mock API
+vi.mock('@/src/utils/api');
+
+const makeStore = () =>
+  configureStore({
+    reducer: { threads: reducer },
+  });
+
 const mockThreadsResponse = {
   status: 'success',
   message: 'ok',
@@ -189,11 +210,6 @@ const mockThreadsResponse = {
         upVotesBy: [],
         downVotesBy: [],
         totalComments: 0,
-        voteData: {
-          totalUpVote: 0,
-          totalDownVote: 0,
-          totalComment: 0,
-        },
       },
       {
         id: 'thread-2',
@@ -202,35 +218,89 @@ const mockThreadsResponse = {
         category: 'General',
         createdAt: '2021-06-21T07:00:00.000Z',
         ownerId: 'users-2',
-        upVotesBy: [],
-        downVotesBy: [],
-        totalComments: 0,
-        voteData: {
-          totalUpVote: 0,
-          totalDownVote: 0,
-          totalComment: 0,
-        },
+        upVotesBy: ['user-1', 'user-3', 'user-4'],
+        downVotesBy: ['user-5'],
+        totalComments: 3,
       },
     ],
   },
 };
 
-describe('fetchThreads createAsyncThunk', () => {
-  it('should call api.fetchThreads and handle fulfilled', async () => {
-    const fetchSpy = vi
-      .spyOn(api, 'fetchThreads')
-      .mockResolvedValue(mockThreadsResponse);
+describe('fetchThreads async thunk', () => {
+  let store: ReturnType<typeof makeStore>;
 
-    // call thunk manually
-    const result = await fetchThreads(null, {
-      dispatch: vi.fn(),
-      getState: vi.fn(),
-      rejectWithValue: vi.fn(),
-    } as any);
+  beforeEach(() => {
+    store = makeStore();
+    vi.clearAllMocks();
+  });
 
-    expect(fetchSpy).toHaveBeenCalled();
-    expect(result.payload).toEqual(mockThreadsResponse);
+  it('should dispatch action correctly when data fetching success', async () => {
+    // arrange
+    vi.mocked(api.fetchThreads).mockResolvedValue(mockThreadsResponse);
 
-    fetchSpy.mockRestore(); // kembalikan ke original
+    // action
+    expect(store.getState().threads.isLoading).toBe(true);
+    const resultAction = await store.dispatch(fetchThreads());
+
+    // assert
+    expect(resultAction.type).toBe('threads/fetchThreads/fulfilled');
+
+    const state = store.getState().threads;
+
+    expect(state.isLoading).toBe(false);
+    expect(state.error).toBeNull();
+
+    expect(state.data).toHaveLength(2);
+    expect(state.data).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'thread-2',
+          title: 'Thread Kedua',
+          body: 'Ini adalah thread kedua',
+          category: 'General',
+          createdAt: '2021-06-21T07:00:00.000Z',
+          ownerId: 'users-2',
+          upVotesBy: ['user-1', 'user-3', 'user-4'],
+          downVotesBy: ['user-5'],
+          totalComments: 3,
+          voteData: {
+            totalUpVote: 3,
+            totalDownVote: 1,
+            totalComment: 3,
+          },
+        }),
+      ]),
+    );
+    expect(state.categories).toEqual(['all', 'General']);
+  });
+
+  it('should dispatch action correctly when data fetching failed', async () => {
+    // arrange
+    const axiosError = {
+      response: { data: { message: 'Unauthorized' } },
+    };
+    vi.mocked(api.fetchThreads).mockRejectedValue(axiosError);
+
+    // action
+    const resultAction = await store.dispatch(fetchThreads());
+
+    // assert
+    expect(resultAction.type).toBe('threads/fetchThreads/rejected');
+    const state = store.getState().threads;
+    expect(state.isLoading).toBe(false);
+    expect(state.error).toBe('Unauthorized');
+    expect(state.data).toEqual([]);
+  });
+
+  it('should use fallback error message when response has no message', async () => {
+    // arrange
+    const axiosError = { response: null };
+    vi.mocked(api.fetchThreads).mockRejectedValue(axiosError);
+
+    // action
+    await store.dispatch(fetchThreads());
+
+    // assert
+    expect(store.getState().threads.error).toBe('Failed fetch threads data');
   });
 });
