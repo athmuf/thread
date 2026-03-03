@@ -11,7 +11,7 @@ import {
   RootLogin,
   LoginProps,
 } from '../features/auth/types';
-import { RootDetailThread } from '../features/detail-thread/types';
+import { RootDetailThreadApi } from '../features/detail-thread/types';
 import {
   CreateCommentPayload,
   RootCreateComment,
@@ -33,8 +33,8 @@ export const createThread = async (
 
 export const fetchDetailThread = async (
   id: string,
-): Promise<RootDetailThread> => {
-  const res = await api.get<RootDetailThread>(`/threads/${id}`);
+): Promise<RootDetailThreadApi> => {
+  const res = await api.get<RootDetailThreadApi>(`/threads/${id}`);
   return res.data;
 };
 

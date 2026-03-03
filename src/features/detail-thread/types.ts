@@ -61,3 +61,35 @@ export interface Owner2 {
   name: string;
   avatar: string;
 }
+
+export interface RootDetailThreadApi {
+  status: string;
+  message: string;
+  data: Data2;
+}
+
+export interface Data2 {
+  detailThread: DetailThread2;
+}
+
+// Response pure api
+export interface DetailThread2 {
+  id: string;
+  title: string;
+  body: string;
+  category: string;
+  createdAt: string;
+  owner: Owner;
+  upVotesBy: string[];
+  downVotesBy: string[];
+  comments: Comment2[];
+}
+
+export interface Comment2 {
+  id: string;
+  content: string;
+  createdAt: string;
+  owner: Owner2;
+  upVotesBy: string[];
+  downVotesBy: string[]
+}

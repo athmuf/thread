@@ -1,11 +1,10 @@
 import * as api from '@/src/utils/api';
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import reducer, {
   updateVote,
   setSelectedCategory,
   fetchThreads,
 } from '../threads-slice';
-import store from '@/app/store';
 import { configureStore } from '@reduxjs/toolkit';
 import { RootThreadsApi } from '../types';
 
@@ -169,7 +168,7 @@ describe('threadSlice reducer', () => {
     expect(nextState).toEqual(initialState);
   });
 
-  // 🔹 setSelectedCategory
+  // setSelectedCategory
   it('should change selectedCategory correctly', () => {
     const nextState = reducer(initialState, setSelectedCategory('frontend'));
 

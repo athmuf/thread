@@ -1,5 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { RootDetailThread, DetailThreadState } from './types';
+import {
+  RootDetailThread,
+  DetailThreadState,
+  RootDetailThreadApi,
+} from './types';
 import * as api from '@/src/utils/api';
 import { AxiosError } from 'axios';
 
@@ -15,7 +19,7 @@ const initialState: DetailThreadState = {
 };
 
 const fetchDetailThread = createAsyncThunk<
-  RootDetailThread,
+  RootDetailThreadApi,
   string,
   { rejectValue: string }
 >('detailThreads/fetchDetailThread', async (id, { rejectWithValue }) => {
@@ -93,28 +97,36 @@ const detailThreadSlice = createSlice({
       // Fetch threads data
       .addCase(fetchDetailThread.pending, state => {
         state.isLoading = true;
+        state.data?.data.detailThread.comments[0].voteData;
       })
       .addCase(fetchDetailThread.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.data = action.payload;
 
-        // Set vote data thread
-        state.voteData.totalUpVote =
-          action.payload.data.detailThread.upVotesBy.length;
-        state.voteData.totalDownVote =
-          action.payload.data.detailThread.downVotesBy.length;
-        state.voteData.totalComment =
-          action.payload.data.detailThread.comments.length;
+        const detailThread = action.payload.data.detailThread;
 
-        // set Vote data comment
-        state.data.data.detailThread.comments =
-          action.payload.data.detailThread.comments.map(comment => ({
-            ...comment,
-            voteData: {
-              totalUpVote: comment.upVotesBy.length,
-              totalDownVote: comment.downVotesBy.length,
+        const enrichedComments = detailThread.comments.map(comment => ({
+          ...comment,
+          voteData: {
+            totalUpVote: comment.upVotesBy.length,
+            totalDownVote: comment.downVotesBy.length,
+          },
+        }));
+
+        state.data = {
+          ...action.payload,
+          data: {
+            detailThread: {
+              ...detailThread,
+              comments: enrichedComments,
             },
-          }));
+          },
+        };
+
+        state.voteData = {
+          totalUpVote: detailThread.upVotesBy.length,
+          totalDownVote: detailThread.downVotesBy.length,
+          totalComment: enrichedComments.length,
+        };
       })
       .addCase(fetchDetailThread.rejected, (state, action) => {
         state.isLoading = false;
