@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { Button } from '../ui/button';
 
-type IconActionProps = React.ComponentProps<typeof Button> & {
+export type IconActionProps = React.ComponentProps<typeof Button> & {
   children: React.ReactNode;
   count: number;
   active?: boolean;
