@@ -1,10 +1,15 @@
 import { ReactNode } from 'react';
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/nextjs-vite';
 import IconAction from '@/components/cuitin/icon-action';
 import { IconActionProps } from '@/components/cuitin/icon-action';
 import { MessageCircle, ThumbsDown, ThumbsUp } from 'lucide-react';
 
-export interface ButtonActionProps extends IconActionProps {}
+export interface ButtonActionProps extends IconActionProps {
+  count: number;
+  active: boolean;
+  actionType: 'voteUp' | 'voteDown' | 'comment';
+  children: ReactNode;
+}
 
 const story: Meta<typeof IconAction> = {
   title: 'ButtonAction',
