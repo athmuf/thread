@@ -12,7 +12,7 @@ import userEvent from '@testing-library/user-event';
 import { render, screen, cleanup } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import LoginForm from './login-form';
+import LoginForm from '../login-form';
 import authReducer from '@/src/features/auth/auth-slice';
 import authDialogReducer, {
   openDialog,
