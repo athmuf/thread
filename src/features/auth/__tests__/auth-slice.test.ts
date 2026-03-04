@@ -116,12 +116,12 @@ describe('authSlice', () => {
       expect(resultAction.payload).toBe('Failed login');
     });
 
-    it('should set isLoading to true when login is pending', () => {
+    it('should set isLoading to true when login is pending', async () => {
       // arrange
       vi.mocked(api.login).mockReturnValue(new Promise(() => {}));
 
       // act
-      store.dispatch(login(loginPayload));
+      await store.dispatch(login(loginPayload));
 
       // assert
       expect(store.getState().auth.login.isLoading).toBe(true);
@@ -194,12 +194,12 @@ describe('authSlice', () => {
       expect(resultAction.payload).toBe('Failed get profile');
     });
 
-    it('should set isLoading to true when fetch profile is pending', () => {
+    it('should set isLoading to true when fetch profile is pending', async () => {
       // arrange
       vi.mocked(api.getProfile).mockReturnValue(new Promise(() => {}));
 
       // act
-      store.dispatch(fetchProfile());
+      await store.dispatch(fetchProfile());
 
       // assert
       expect(store.getState().auth.me.isLoading).toBe(true);

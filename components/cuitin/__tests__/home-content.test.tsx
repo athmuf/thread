@@ -1,13 +1,13 @@
-import { describe, beforeEach, afterEach, vi, it, expect } from "vitest";
+import { describe, beforeEach, afterEach, vi, it, expect } from 'vitest';
 import { render, screen, cleanup } from '@testing-library/react';
-import { configureStore } from "@reduxjs/toolkit";
-import { Provider } from "react-redux";
+import { configureStore } from '@reduxjs/toolkit';
+import { Provider } from 'react-redux';
 import userEvent from '@testing-library/user-event';
-import HomeContent from "../home-content";
-import threadsReducer from "@/src/features/threads/threads-slice"
-import usersReducer from "@/src/features/users/users-slice"
-import authReducer from "@/src/features/auth/auth-slice"
-import leaderboardsReducer from "@/src/features/leaderboards/leaederboards-slice"
+import HomeContent from '../home-content';
+import threadsReducer from '@/src/features/threads/threads-slice';
+import usersReducer from '@/src/features/users/users-slice';
+import authReducer from '@/src/features/auth/auth-slice';
+import leaderboardsReducer from '@/src/features/leaderboards/leaederboards-slice';
 
 /**
  * Test Scenarios:
@@ -18,7 +18,7 @@ import leaderboardsReducer from "@/src/features/leaderboards/leaederboards-slice
  */
 
 const mockPush = vi.fn();
-const mockGet = vi.fn()
+const mockGet = vi.fn();
 
 vi.mock('@/src/utils/api', () => ({
   default: {
@@ -69,23 +69,21 @@ describe('homeContent component', () => {
     auth: authReducer,
   };
 
-  const store = configureStore({ reducer: reducers });
-  
-  type RootState = ReturnType<typeof store.getState>;
-  
+  type RootState = ReturnType<ReturnType<typeof configureStore>['getState']>;
+
   const makeStore = (preloadedState?: Partial<RootState>) =>
     configureStore({
       reducer: reducers,
-      preloadedState: preloadedState as RootState
+      preloadedState: preloadedState as RootState,
     });
-    
-    const renderWithProvider = (store = makeStore()) => {
-      return render(
-        <Provider store={store}>
+
+  const renderWithProvider = (store = makeStore()) => {
+    return render(
+      <Provider store={store}>
         <HomeContent />
       </Provider>,
-      );
-    };
+    );
+  };
 
   it('should render the default tab content on initial render', () => {
     // Arrange & Act

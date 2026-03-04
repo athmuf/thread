@@ -12,7 +12,7 @@ import _default from 'dompurify';
 import { ThumbsDown, ThumbsUp } from 'lucide-react';
 import { Separator } from '../../ui/separator';
 import { Comment } from '@/src/features/detail-thread/types';
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/src/hooks/redux-hooks';
 import { voteComment } from '@/src/features/vote/vote-slice';
 import { updateCommentVote } from '@/src/features/detail-thread/detail-thread-slice';
@@ -40,23 +40,15 @@ const CommentCard = ({ data }: CommentCardProps) => {
   const { data: thread } = useAppSelector(state => state.detailThread);
   const threadId = thread?.data.detailThread.id || '';
 
-  const [vote, setVote] = useState<VoteType>('neutral');
+  const voteState = useMemo(() => {
+    if (!profile?.id) return 'neutral';
+    if (upVotesBy.includes(profile.id)) return 'upVote';
+    if (downVotesBy.includes(profile.id)) return 'downVote';
+    return 'neutral';
+  }, [upVotesBy, downVotesBy, profile?.id]);
 
-  useEffect(() => {
-    if (profile?.id) {
-      const isUpVote = upVotesBy.includes(profile.id) ?? false;
-      const isDownVote = downVotesBy.includes(profile.id) ?? false;
-
-      if (isUpVote) {
-        setVote('upVote');
-      } else if (isDownVote) {
-        setVote('downVote');
-      } else {
-        setVote('neutral');
-      }
-    }
-  }, [profile?.id, upVotesBy, downVotesBy]);
-
+  const [vote, setVote] = useState<VoteType>(voteState);
+  
   const handleLogin = () => {
     dispatch(openDialog('login'));
   };

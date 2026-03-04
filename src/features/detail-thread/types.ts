@@ -91,5 +91,5 @@ export interface Comment2 {
   createdAt: string;
   owner: Owner2;
   upVotesBy: string[];
-  downVotesBy: string[]
+  downVotesBy: string[];
 }

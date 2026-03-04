@@ -11,7 +11,7 @@ import * as z from 'zod';
 import { toast } from 'sonner';
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { useAppSelector, useAppDispatch } from '@/src/hooks/redux-hooks';
 import {
   createThreads,
@@ -37,10 +37,15 @@ const CreateThread = () => {
     },
   });
 
-  const reactiveValue = threadForm.watch();
+  const categoryValue = useWatch({
+    control: threadForm.control,
+    name: 'category',
+    defaultValue: '',
+  });
+
 
   const handleBlur = () => {
-    if (!reactiveValue.category.trim()) {
+    if (categoryValue.trim()) {
       setShowInputTag(false);
     }
   };
@@ -61,7 +66,10 @@ const CreateThread = () => {
   const { profile, isAuthenticated } = useAppSelector(state => state.auth);
   if (isAuthenticated)
     return (
-      <Card className="shadow-none border-x-0 border-t-0 rounded-none py-6 gap-2" data-testid="create-thread">
+      <Card
+        className="shadow-none border-x-0 border-t-0 rounded-none py-6 gap-2"
+        data-testid="create-thread"
+      >
         <form onSubmit={threadForm.handleSubmit(onSubmit)}>
           <CardContent className="flex px-2 md:px-6">
             {profile ? (
@@ -107,7 +115,7 @@ const CreateThread = () => {
                       {...field}
                       autoFocus
                       onBlur={handleBlur}
-                      size={Math.max(reactiveValue.category.length, 1)}
+                      size={Math.max(categoryValue.length, 1)}
                       className="rounded-full h-6 focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none shadow-none"
                     />
                   )}
@@ -132,4 +140,4 @@ const CreateThread = () => {
     );
 };
 
-export default CreateThread
+export default CreateThread;

@@ -1,9 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import {
-  RootDetailThread,
-  DetailThreadState,
-  RootDetailThreadApi,
-} from './types';
+import { DetailThreadState, RootDetailThreadApi } from './types';
 import * as api from '@/src/utils/api';
 import { AxiosError } from 'axios';
 
@@ -97,7 +93,6 @@ const detailThreadSlice = createSlice({
       // Fetch threads data
       .addCase(fetchDetailThread.pending, state => {
         state.isLoading = true;
-        state.data?.data.detailThread.comments[0].voteData;
       })
       .addCase(fetchDetailThread.fulfilled, (state, action) => {
         state.isLoading = false;

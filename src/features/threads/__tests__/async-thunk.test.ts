@@ -1,12 +1,7 @@
 import * as api from '@/src/utils/api';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import reducer, {
-  updateVote,
-  setSelectedCategory,
-  fetchThreads,
-} from '../threads-slice';
+import reducer, { fetchThreads } from '../threads-slice';
 import { configureStore } from '@reduxjs/toolkit';
-import { RootThreadsApi } from '../types';
 
 /**
  * test scenario for threadSlice
