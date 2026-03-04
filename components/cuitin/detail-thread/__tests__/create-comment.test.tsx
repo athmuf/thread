@@ -19,9 +19,9 @@ import userEvent from '@testing-library/user-event';
 
 describe('createComment component', () => {
   const reducers = {
-  auth: authReducer,
-  detailThread: detailThreadReducer,
-};
+    auth: authReducer,
+    detailThread: detailThreadReducer,
+  };
 
   const store = configureStore({ reducer: reducers });
 

@@ -20,6 +20,14 @@ import leaderboardsReducer from "@/src/features/leaderboards/leaederboards-slice
 const mockPush = vi.fn();
 const mockGet = vi.fn()
 
+vi.mock('@/src/utils/api', () => ({
+  default: {
+    getThreads: vi.fn(),
+    getUsers: vi.fn(),
+    getLeaderboards: vi.fn(),
+  },
+}));
+
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: mockPush }),
   useSearchParams: () => ({
@@ -54,27 +62,34 @@ describe('homeContent component', () => {
     cleanup();
   });
 
-  const makeStore = () =>
-  configureStore({
-    reducer: {
-      threads: threadsReducer,
-      users: usersReducer,
-      leaderboards: leaderboardsReducer,
-      auth: authReducer,
-    },
-  });
+  const reducers = {
+    threads: threadsReducer,
+    users: usersReducer,
+    leaderboards: leaderboardsReducer,
+    auth: authReducer,
+  };
 
-const renderComponent = (store = makeStore()) => {
-  return render(
-    <Provider store={store}>
-      <HomeContent />
-    </Provider>,
-  );
-};
+  const store = configureStore({ reducer: reducers });
+  
+  type RootState = ReturnType<typeof store.getState>;
+  
+  const makeStore = (preloadedState?: Partial<RootState>) =>
+    configureStore({
+      reducer: reducers,
+      preloadedState: preloadedState as RootState
+    });
+    
+    const renderWithProvider = (store = makeStore()) => {
+      return render(
+        <Provider store={store}>
+        <HomeContent />
+      </Provider>,
+      );
+    };
 
   it('should render the default tab content on initial render', () => {
     // Arrange & Act
-    renderComponent();
+    renderWithProvider();
 
     // Assert
     expect(screen.getByTestId('threads')).toBeInTheDocument();
@@ -87,7 +102,7 @@ const renderComponent = (store = makeStore()) => {
     // Arrange
     mockGet.mockReturnValue('category');
     const user = userEvent.setup({ delay: null });
-    renderComponent();
+    renderWithProvider();
 
     // Action
     await user.click(screen.getByRole('tab', { name: /Category/i }));
@@ -101,7 +116,7 @@ const renderComponent = (store = makeStore()) => {
     // Arrange
     mockGet.mockReturnValue('leaderboard');
     const user = userEvent.setup({ delay: null });
-    renderComponent();
+    renderWithProvider();
 
     // Act
     await user.click(screen.getByRole('tab', { name: /Leaderboards/i }));
