@@ -9,12 +9,17 @@ jobs:
   automation-test-job:
     runs-on: ubuntu-latest
 
+    env:
+      NEXT_PUBLIC_API_BASE_URL: https://forum-api.dicoding.dev/v1
+
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
+
+      - name: Use Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: '20'   # ✅ pin a specific version
+
       - name: npm install and test
         run: |
           npm install
