@@ -121,7 +121,7 @@ describe('authSlice', () => {
       vi.mocked(api.login).mockReturnValue(new Promise(() => {}));
 
       // act
-      await store.dispatch(login(loginPayload));
+      store.dispatch(login(loginPayload));
 
       // assert
       expect(store.getState().auth.login.isLoading).toBe(true);
@@ -199,7 +199,7 @@ describe('authSlice', () => {
       vi.mocked(api.getProfile).mockReturnValue(new Promise(() => {}));
 
       // act
-      await store.dispatch(fetchProfile());
+      store.dispatch(fetchProfile());
 
       // assert
       expect(store.getState().auth.me.isLoading).toBe(true);

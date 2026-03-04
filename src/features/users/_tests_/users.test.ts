@@ -121,7 +121,7 @@ describe('usersSlice', () => {
       vi.mocked(api.fetchUsers).mockReturnValue(new Promise(() => {}));
 
       // action
-      await store.dispatch(fetchUsers());
+      store.dispatch(fetchUsers());
 
       // assert
       expect(store.getState().users.isLoading).toBe(true);
