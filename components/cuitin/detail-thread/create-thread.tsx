@@ -18,7 +18,7 @@ import {
   fetchThreads,
 } from '@/src/features/threads/threads-slice';
 
-export const CreateThread = () => {
+const CreateThread = () => {
   const dispatch = useAppDispatch();
   const [showInputTag, setShowInputTag] = useState(false);
 
@@ -131,3 +131,5 @@ export const CreateThread = () => {
       </Card>
     );
 };
+
+export default CreateThread

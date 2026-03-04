@@ -6,6 +6,7 @@ import userEvent from '@testing-library/user-event';
 import HomeContent from "../home-content";
 import threadsReducer from "@/src/features/threads/threads-slice"
 import usersReducer from "@/src/features/users/users-slice"
+import authReducer from "@/src/features/auth/auth-slice"
 import leaderboardsReducer from "@/src/features/leaderboards/leaederboards-slice"
 
 /**
@@ -27,6 +28,21 @@ vi.mock('next/navigation', () => ({
   }),
 }));
 
+vi.mock('../leaderboards/leaderboards', () => ({
+  default: () => <div data-testid="leaderboards">Leaderboards</div>,
+}));
+
+vi.mock('../category/category-content', () => ({
+  default: () => <div data-testid="category-content">Category</div>,
+}));
+
+vi.mock('../threads/thread-list', () => ({
+  default: () => <div data-testid="threads">News</div>,
+}));
+
+vi.mock('../detail-thread/create-thread', () => ({
+  default: () => <div data-testid="create-thread">Create thread</div>,
+}));
 
 describe('homeContent component', () => {
   beforeEach(() => {
@@ -44,6 +60,7 @@ describe('homeContent component', () => {
       threads: threadsReducer,
       users: usersReducer,
       leaderboards: leaderboardsReducer,
+      auth: authReducer,
     },
   });
 
@@ -62,7 +79,7 @@ const renderComponent = (store = makeStore()) => {
     // Assert
     expect(screen.getByTestId('threads')).toBeInTheDocument();
     expect(screen.getByTestId('create-thread')).toBeInTheDocument();
-    expect(screen.queryByTestId('category')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('category-content')).not.toBeInTheDocument();
     expect(screen.queryByTestId('leaderboards')).not.toBeInTheDocument();
   });
 
@@ -76,7 +93,7 @@ const renderComponent = (store = makeStore()) => {
     await user.click(screen.getByRole('tab', { name: /Category/i }));
 
     // Assert
-    expect(screen.getByTestId('category')).toBeInTheDocument();
+    expect(screen.getByTestId('category-content')).toBeInTheDocument();
     expect(screen.queryByTestId('threads')).not.toBeInTheDocument();
   });
 
