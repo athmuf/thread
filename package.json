@@ -16,7 +16,7 @@
     "posttest": "npm run lint",
     "test": "vitest",
     "e2e": "cypress run",
-    "ci:test": "vitest --no-watch && start-server-and-test dev http-get://0.0.0.0:3000 e2e"
+    "ci:test": "vitest --no-watch && npm run build && start-server-and-test start http-get://localhost:3000 e2e"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
