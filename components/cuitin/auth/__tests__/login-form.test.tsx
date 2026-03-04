@@ -19,29 +19,29 @@ import authDialogReducer, {
 } from '@/src/features/auth-dialog/auth-dialog-slice';
 import { Dialog } from '@/components/ui/dialog';
 
-vi.mock('sonner');
-
-const makeStore = () =>
-  configureStore({
-    reducer: {
-      auth: authReducer,
-      authDialog: authDialogReducer,
-    },
-  });
-
-const renderWithProvider = (store = makeStore()) => {
-  store.dispatch(openDialog('login'));
-
-  return render(
-    <Provider store={store}>
-      <Dialog open={true}>
-        <LoginForm />
-      </Dialog>
-    </Provider>,
-  );
-};
-
 describe('LoginForm component', () => {
+  vi.mock('sonner');
+
+  const makeStore = () =>
+    configureStore({
+      reducer: {
+        auth: authReducer,
+        authDialog: authDialogReducer,
+      },
+    });
+
+  const renderWithProvider = (store = makeStore()) => {
+    store.dispatch(openDialog('login'));
+
+    return render(
+      <Provider store={store}>
+        <Dialog open={true}>
+          <LoginForm />
+        </Dialog>
+      </Provider>,
+    );
+  };
+
   beforeEach(() => {
     vi.clearAllMocks();
   });

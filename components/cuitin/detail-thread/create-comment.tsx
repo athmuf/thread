@@ -71,7 +71,7 @@ export const CreateComment = () => {
                   />
                 )}
               />
-              <Button className="rounded-full px-6 cursor-pointer hover:shadow-md">
+              <Button className="rounded-full px-6 cursor-pointer hover:shadow-md" disabled={!commentForm.watch('content')}>
                 Reply
               </Button>
             </div>

@@ -23,29 +23,35 @@ import { Dialog } from '@/components/ui/dialog';
 import RegisterForm from '../register-form';
 import * as api from '@/src/utils/api'
 
-vi.mock('sonner');
-
-const makeStore = () =>
-  configureStore({
-    reducer: {
-      auth: authReducer,
-      authDialog: authDialogReducer,
-    },
-  });
-
-const renderWithProvider = (store = makeStore()) => {
-  store.dispatch(openDialog('register'));
-
-  return render(
-    <Provider store={store}>
-      <Dialog open={true}>
-        <RegisterForm />
-      </Dialog>
-    </Provider>,
-  );
-};
-
 describe('LoginForm component', () => {
+  vi.mock('sonner');
+
+  vi.mock('@/src/utils/api', () => ({
+    register: vi.fn(),
+    login: vi.fn(),
+    getProfile: vi.fn(),
+  }));
+
+  const makeStore = () =>
+    configureStore({
+      reducer: {
+        auth: authReducer,
+        authDialog: authDialogReducer,
+      },
+    });
+
+  const renderWithProvider = (store = makeStore()) => {
+    store.dispatch(openDialog('register'));
+
+    return render(
+      <Provider store={store}>
+        <Dialog open={true}>
+          <RegisterForm />
+        </Dialog>
+      </Provider>,
+    );
+  };
+
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -129,17 +135,16 @@ describe('LoginForm component', () => {
     expect(store.dispatch).not.toHaveBeenCalled();
   })
 
-  it('should call register dispatch when register button is clicked with valid data', async () => {
-    // Arrange
-    vi.mocked(api.register).mockResolvedValue({
-    status: 'success',
-    message: 'Create account success',
-    data: { user: { id: 'user-1', name: 'John Doe', email: 'john@example.com', avatar: '' } },
-  });
+    it('should call register dispatch when register button is clicked with valid data', async () => {
+      // Arrange
+      vi.mocked(api.register).mockResolvedValue({
+      status: 'success',
+      message: 'Create account success',
+      data: { user: { id: 'John Doe', name: 'John Doe', email: 'john@example.com', avatar: '' } },
+    });
 
-  const store = makeStore();
-  renderWithProvider(store);
-    renderWithProvider();
+    const store = makeStore();
+    renderWithProvider(store);
     const nameInput = screen.getByPlaceholderText('John Doe');
     const emailInput = screen.getByPlaceholderText('johndoe@example.com');
     const passwordInput = screen.getByLabelText('Password');

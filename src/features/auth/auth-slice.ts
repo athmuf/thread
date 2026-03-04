@@ -10,7 +10,7 @@ import * as api from '@/src/utils/api';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
 
-const initialState: AuthState = {
+export const initialState: AuthState = {
   profile: null,
   isAuthenticated: false,
   register: {
