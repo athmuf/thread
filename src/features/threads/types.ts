@@ -62,7 +62,7 @@ export interface RootThreadsApi {
   data: Data3;
 }
 
-export interface Data3{
+export interface Data3 {
   threads: Thread2[];
 }
 

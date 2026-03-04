@@ -17,7 +17,7 @@ import _default from 'dompurify';
 import { MessageCircle, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '@/src/hooks/redux-hooks';
 import { selectUsersByIds } from '@/src/helper/format-name';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Separator } from '../../ui/separator';
 import ErrorState from '../error-state';
 import SkeletonThreads from '../threads/skeleton-threads';
@@ -35,24 +35,15 @@ const ViewThread = () => {
 
   const { profile } = useAppSelector(state => state.auth);
 
-  const [vote, setVote] = useState<VoteType>('neutral');
-
-  useEffect(() => {
-    if (profile?.id && data) {
-      const isUpVote =
-        data.data.detailThread.upVotesBy.includes(profile.id) ?? false;
-      const isDownVote =
-        data.data.detailThread.downVotesBy.includes(profile.id) ?? false;
-
-      if (isUpVote) {
-        setVote('upVote');
-      } else if (isDownVote) {
-        setVote('downVote');
-      } else {
-        setVote('neutral');
-      }
-    }
+  const voteState = useMemo(() => {
+    if (!profile?.id || !data) return 'neutral';
+    const { upVotesBy, downVotesBy } = data.data.detailThread;
+    if (upVotesBy.includes(profile.id)) return 'upVote';
+    if (downVotesBy.includes(profile.id)) return 'downVote';
+    return 'neutral';
   }, [profile?.id, data]);
+
+  const [vote, setVote] = useState<VoteType>(voteState);
 
   const thread = data?.data.detailThread;
 

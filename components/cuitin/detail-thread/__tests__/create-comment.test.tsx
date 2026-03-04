@@ -1,11 +1,11 @@
-import { describe, beforeEach, afterEach, vi, it, expect } from "vitest";
+import { describe, beforeEach, afterEach, vi, it, expect } from 'vitest';
 import { render, screen, cleanup } from '@testing-library/react';
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore } from '@reduxjs/toolkit';
 import authReducer from '@/src/features/auth/auth-slice';
-import detailThreadReducer from "@/src/features/detail-thread/detail-thread-slice"
-import CreateComment from "../create-comment";
-import { Provider } from "react-redux";
-import { initialState as initialAuthState } from "@/src/features/auth/auth-slice";
+import detailThreadReducer from '@/src/features/detail-thread/detail-thread-slice';
+import CreateComment from '../create-comment';
+import { Provider } from 'react-redux';
+import { initialState as initialAuthState } from '@/src/features/auth/auth-slice';
 import userEvent from '@testing-library/user-event';
 
 /**
@@ -23,20 +23,18 @@ describe('createComment component', () => {
     detailThread: detailThreadReducer,
   };
 
-  const store = configureStore({ reducer: reducers });
-
-  type RootState = ReturnType<typeof store.getState>;
+  type RootState = ReturnType<ReturnType<typeof configureStore>['getState']>;
 
   const makeStore = (preloadedState?: Partial<RootState>) =>
     configureStore({
       reducer: reducers,
-      preloadedState: preloadedState as RootState
+      preloadedState: preloadedState as RootState,
     });
-  
+
   const renderWithProvider = (store = makeStore()) => {
     return render(
       <Provider store={store}>
-          <CreateComment />
+        <CreateComment />
       </Provider>,
     );
   };
@@ -54,42 +52,46 @@ describe('createComment component', () => {
     const store = makeStore({
       auth: {
         ...initialAuthState,
-        isAuthenticated: true
-      }
+        isAuthenticated: true,
+      },
     });
 
     // Action
-    renderWithProvider(store)
+    renderWithProvider(store);
 
     // Assert
-    expect(screen.getByPlaceholderText('Posting your reply...')).toBeInTheDocument();
-  })
+    expect(
+      screen.getByPlaceholderText('Posting your reply...'),
+    ).toBeInTheDocument();
+  });
 
   it('should not render createComment component when unauthenticated', async () => {
     // Arrange
     const store = makeStore({
       auth: {
         ...initialAuthState,
-        isAuthenticated: false
-      }
+        isAuthenticated: false,
+      },
     });
 
     // Action
-    renderWithProvider(store)
+    renderWithProvider(store);
 
     // Assert
-    expect(screen.queryByPlaceholderText('Posting your reply...')).not.toBeInTheDocument();
-  })
+    expect(
+      screen.queryByPlaceholderText('Posting your reply...'),
+    ).not.toBeInTheDocument();
+  });
 
   it('should handle comment input correctly', async () => {
     // Arrange
     const store = makeStore({
       auth: {
         ...initialAuthState,
-        isAuthenticated: true
-      }
+        isAuthenticated: true,
+      },
     });
-    renderWithProvider(store)
+    renderWithProvider(store);
     const commentInput = screen.getByPlaceholderText('Posting your reply...');
     const replyButton = screen.getByRole('button', { name: /reply/i });
 
@@ -100,6 +102,6 @@ describe('createComment component', () => {
     await await user.type(commentInput, 'i agree with you');
 
     expect(commentInput).toHaveValue('i agree with you');
-    expect(replyButton).toBeEnabled()
-  })
-})
+    expect(replyButton).toBeEnabled();
+  });
+});

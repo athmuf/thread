@@ -21,7 +21,7 @@ import authDialogReducer, {
 } from '@/src/features/auth-dialog/auth-dialog-slice';
 import { Dialog } from '@/components/ui/dialog';
 import RegisterForm from '../register-form';
-import * as api from '@/src/utils/api'
+import * as api from '@/src/utils/api';
 
 describe('LoginForm component', () => {
   vi.mock('sonner');
@@ -88,36 +88,42 @@ describe('LoginForm component', () => {
 
   it('should show error when email is invalid', async () => {
     // Arrange
-    renderWithProvider()
+    renderWithProvider();
     const emailInput = screen.getByPlaceholderText('johndoe@example.com');
-  
+
     // Action
     const user = userEvent.setup({ delay: null });
     await await user.type(emailInput, 'john#example.com');
     await user.click(screen.getByRole('button', { name: /register/i }));
-  
+
     // Assert
     expect(emailInput).toHaveAttribute('aria-invalid', 'true');
-    expect(await screen.findByText(/Email must be a valid email/i)).toBeInTheDocument();
-  })
+    expect(
+      await screen.findByText(/Email must be a valid email/i),
+    ).toBeInTheDocument();
+  });
 
   it('should show error when password is invalid', async () => {
     // Arrange
-    renderWithProvider()
+    renderWithProvider();
     const passwordInput = screen.getByLabelText('Password');
+    const emailInput = screen.getByPlaceholderText('johndoe@example.com');
 
     // Action
     const user = userEvent.setup({ delay: null });
+    await await user.type(emailInput, 'john#example.com');
     // User not input password
     await user.click(screen.getByRole('button', { name: /register/i }));
 
     // Assert
     expect(passwordInput).toHaveAttribute('aria-invalid', 'true');
-    expect(await screen.findByText(/Password is not allowed to be empty/i)).toBeInTheDocument();
-  })
+    expect(
+      await screen.findByText(/Password is not allowed to be empty/i),
+    ).toBeInTheDocument();
+  });
 
   it('should not dispatch register when validation fails', async () => {
-    renderWithProvider()
+    renderWithProvider();
     // Arrange
     const store = makeStore();
     vi.spyOn(store, 'dispatch');
@@ -133,14 +139,21 @@ describe('LoginForm component', () => {
     // Assert
     expect(emailInput).toHaveAttribute('aria-invalid', 'true');
     expect(store.dispatch).not.toHaveBeenCalled();
-  })
+  });
 
-    it('should call register dispatch when register button is clicked with valid data', async () => {
-      // Arrange
-      vi.mocked(api.register).mockResolvedValue({
+  it('should call register dispatch when register button is clicked with valid data', async () => {
+    // Arrange
+    vi.mocked(api.register).mockResolvedValue({
       status: 'success',
       message: 'Create account success',
-      data: { user: { id: 'John Doe', name: 'John Doe', email: 'john@example.com', avatar: '' } },
+      data: {
+        user: {
+          id: 'John Doe',
+          name: 'John Doe',
+          email: 'john@example.com',
+          avatar: '',
+        },
+      },
     });
 
     const store = makeStore();

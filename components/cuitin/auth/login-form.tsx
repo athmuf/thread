@@ -75,7 +75,7 @@ const LoginForm = () => {
     if (!open) {
       loginForm.reset();
     }
-  }, [open]);
+  }, [open, loginForm]);
 
   return (
     <DialogContent className="py-24">
@@ -137,7 +137,7 @@ const LoginForm = () => {
       </form>
       <DialogFooter className="flex justify-center sm:justify-center">
         <DialogDescription className="text-center">
-          Don't have an account yet?{' '}
+          Don&quot;t have an account yet?{' '}
           <Button
             type="button"
             variant="link"

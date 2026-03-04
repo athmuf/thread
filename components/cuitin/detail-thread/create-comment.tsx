@@ -8,7 +8,7 @@ import { Card, CardContent } from '../../ui/card';
 import * as z from 'zod';
 import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { createComment } from '@/src/features/comment/comment-slice';
 import { useAppSelector, useAppDispatch } from '@/src/hooks/redux-hooks';
 import { fetchDetailThread } from '@/src/features/detail-thread/detail-thread-slice';
@@ -27,6 +27,12 @@ export const CreateComment = () => {
     defaultValues: {
       content: '',
     },
+  });
+
+  const contentValue = useWatch({
+    control: commentForm.control,
+    name: 'content',
+    defaultValue: '',
   });
 
   const onSubmit = async (data: z.infer<typeof createCommentSchema>) => {
@@ -71,7 +77,10 @@ export const CreateComment = () => {
                   />
                 )}
               />
-              <Button className="rounded-full px-6 cursor-pointer hover:shadow-md" disabled={!commentForm.watch('content')}>
+              <Button
+                className="rounded-full px-6 cursor-pointer hover:shadow-md"
+                disabled={!contentValue}
+              >
                 Reply
               </Button>
             </div>
