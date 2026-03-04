@@ -4,7 +4,7 @@ import { Separator } from '../../ui/separator';
 
 const CategoryContent = () => {
   return (
-    <div>
+    <div data-testid="category-content">
       <CategoryList />
       <Separator />
       <CategoryThreads />

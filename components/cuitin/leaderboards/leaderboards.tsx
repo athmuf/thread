@@ -17,7 +17,7 @@ const Leaderboards = () => {
     return <ErrorState />;
   }
   return (
-    <div className="py-3 px-6">
+    <div className="py-3 px-6" data-testid="leaderboards">
       <div className="text-xl text-center font-semibold pb-5">
         Cuitin Leaderboards
       </div>

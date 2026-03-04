@@ -14,7 +14,7 @@ const Threads = () => {
   }
 
   return (
-    <div className="py-4">
+    <div className="py-4" data-testid="threads">
       {data.map(thread => (
         <Thread thread={thread} key={thread.id} />
       ))}
