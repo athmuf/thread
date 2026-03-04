@@ -132,5 +132,5 @@ const threadsSlice = createSlice({
 });
 
 export { fetchThreads, createThreads };
-export const { updateVote, setSelectedCategory } = threadsSlice.actions;
+export const { updateVote } = threadsSlice.actions;
 export default threadsSlice.reducer;
