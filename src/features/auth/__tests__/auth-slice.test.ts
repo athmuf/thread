@@ -116,7 +116,7 @@ describe('authSlice', () => {
       expect(resultAction.payload).toBe('Failed login');
     });
 
-    it('should set isLoading to true when login is pending', () => {
+    it('should set isLoading to true when login is pending', async () => {
       // arrange
       vi.mocked(api.login).mockReturnValue(new Promise(() => {}));
 
@@ -194,7 +194,7 @@ describe('authSlice', () => {
       expect(resultAction.payload).toBe('Failed get profile');
     });
 
-    it('should set isLoading to true when fetch profile is pending', () => {
+    it('should set isLoading to true when fetch profile is pending', async () => {
       // arrange
       vi.mocked(api.getProfile).mockReturnValue(new Promise(() => {}));
 

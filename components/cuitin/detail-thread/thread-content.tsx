@@ -14,7 +14,7 @@ const ThreadContent = ({ id }: { id: string }) => {
   useEffect(() => {
     void dispatch(fetchDetailThread(id));
     void dispatch(fetchUsers());
-  }, [id]);
+  }, [id, dispatch]);
 
   return (
     <div className="w-full">

@@ -116,7 +116,7 @@ describe('usersSlice', () => {
       expect(store.getState().users.error).toBe('Failed fetch threads data');
     });
 
-    it('should set isLoading to true when fetch is pending', () => {
+    it('should set isLoading to true when fetch is pending', async () => {
       // arrange
       vi.mocked(api.fetchUsers).mockReturnValue(new Promise(() => {}));
 

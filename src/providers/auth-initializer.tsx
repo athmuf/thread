@@ -14,7 +14,7 @@ export const AuthInitializer = () => {
     if (token && !isAuthenticated) {
       void dispatch(fetchProfile());
     }
-  }, [dispatch]);
+  }, [dispatch, isAuthenticated]);
 
   return null;
 };

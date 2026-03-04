@@ -88,7 +88,11 @@ describe('detailThreadSlice reducer', () => {
     );
     const updatedThread = nextState.data?.data.detailThread.comments.find(
       comment => comment.id === 'comment-1',
-    )!;
+    );
+
+    if (!updatedThread) {
+      throw new Error('Comment not found');
+    }
 
     expect(updatedThread.voteData.totalUpVote).toBe(2);
     expect(updatedThread.upVotesBy).toContain('user-1');
@@ -108,7 +112,11 @@ describe('detailThreadSlice reducer', () => {
 
     const updatedThread = nextState.data?.data.detailThread.comments.find(
       comment => comment.id === 'comment-1',
-    )!;
+    );
+
+    if (!updatedThread) {
+      throw new Error('Comment not found');
+    }
 
     expect(updatedThread.voteData.totalUpVote).toBe(0);
     expect(updatedThread.upVotesBy).not.toContain('user-3');
@@ -127,7 +135,11 @@ describe('detailThreadSlice reducer', () => {
     );
     const updatedThread = nextState.data?.data.detailThread.comments.find(
       comment => comment.id === 'comment-1',
-    )!;
+    );
+
+    if (!updatedThread) {
+      throw new Error('Comment not found');
+    }
 
     expect(updatedThread.voteData.totalDownVote).toBe(3);
     expect(updatedThread.downVotesBy).toContain('user-1');
@@ -147,7 +159,11 @@ describe('detailThreadSlice reducer', () => {
 
     const updatedThread = nextState.data?.data.detailThread.comments.find(
       comment => comment.id === 'comment-1',
-    )!;
+    );
+
+    if (!updatedThread) {
+      throw new Error('Comment not found');
+    }
 
     expect(updatedThread.voteData.totalDownVote).toBe(1);
     expect(updatedThread.upVotesBy).not.toContain('user-5');
