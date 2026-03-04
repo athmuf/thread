@@ -8,7 +8,7 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import CategoryContent from './category/category-content';
 import Leaderboards from './leaderboards/leaderboards';
-import { CreateThread } from './detail-thread/create-thread';
+import CreateThread from './detail-thread/create-thread';
 import Threads from './threads/thread-list';
 import Tab from './layout/tab';
 
