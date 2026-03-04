@@ -107,9 +107,11 @@ describe('LoginForm component', () => {
     // Arrange
     renderWithProvider();
     const passwordInput = screen.getByLabelText('Password');
+    const emailInput = screen.getByPlaceholderText('johndoe@example.com');
 
     // Action
     const user = userEvent.setup({ delay: null });
+    await await user.type(emailInput, 'john#example.com');
     // User not input password
     await user.click(screen.getByRole('button', { name: /register/i }));
 
